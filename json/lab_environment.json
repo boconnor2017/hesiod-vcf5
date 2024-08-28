@@ -1,0 +1,46 @@
+{
+    "physical_network" : [{
+        "default_gateway" : "172.16.0.1",
+        "subnet_mask" : "255.255.255.0",
+        "cidr" : "24",
+        "network_type" : "physical subnet"
+    },
+    {
+        "default_gateway" : "172.16.10.1",
+        "subnet_mask" : "255.255.255.0",
+        "cidr" : "24",
+        "network_type" : "VCF Management subnet"
+    },
+    {
+        "default_gateway" : "172.16.11.1",
+        "subnet_mask" : "255.255.255.0",
+        "cidr" : "24",
+        "network_type" : "VCF vSAN subnet"
+    },
+    {
+        "default_gateway" : "172.16.12.1",
+        "subnet_mask" : "255.255.255.0",
+        "cidr" : "24",
+        "network_type" : "VCF TEP subnet"
+    },
+    {
+        "default_gateway" : "172.16.13.1",
+        "subnet_mask" : "255.255.255.0",
+        "cidr" : "24",
+        "network_type" : "VCF vMotion subnet"
+    }],
+
+    "physical_server" : [{
+        "username" : "root",
+        "password" : "VMware1!",
+        "ip_address" : "172.16.0.203",
+        "server_type" : "VCF Lab Nested Resources"
+    }],
+    
+    "universal_authentication" : {
+        "photon_os_username" : "hesiod-vcf",
+        "photon_os_password" : "VMware123!",
+        "universal_password" : "VMware123!",
+        "vcenter_administrator_sso_login" : "administrator@vsphere.local"
+    } 
+}

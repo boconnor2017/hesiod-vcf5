@@ -12,3 +12,22 @@ The following prerequisites are required to run hesiod-vcf5:
 | VMware vCenter Server Appliance | VMware-VCSA-all-8.0.3-24022515.iso |
 | Nested ESXi Appliance | version 8.0U3 (the easiest approach is to download from [William Lam's blog](https://williamlam.com/nested-virtualization/nested-esxi-virtual-appliance)) |
 | VCF Cloud Builder Appliance | version 5.2 |
+
+# Quick Start
+Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Photon OS Quick Start](https://github.com/boconnor2017/hesiod/blob/main/photon/readme.md) readme file. 
+
+```
+sudo su
+```
+```
+cd /usr/local/hesiod/
+```
+```
+git clone https://github.com/boconnor2017/hesiod-vcf5
+```
+```
+cd hesiod-vcf5/
+```
+```
+python3 hesiod-vcf5.py
+```
