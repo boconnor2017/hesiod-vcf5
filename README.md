@@ -35,7 +35,19 @@ If your prerequisites (config files, vcenter, and dns) are ready to rock and rol
 ```
 python3 hesiod-vcf5.py 
 ```
-If you want to be prompted to edit lab variables:
+If you want to be prompted to edit lab variables config:
 ```
-python3 hesiod-vcf5.py -lav
+python3 hesiod-vcf5.py -lev
+```
+If you want to be prompted to edit vcf bringup config:
+```
+python3 hesiod-vcf5.py -vcf
+```
+If you want to deploy a DNS server:
+```
+python3 hesiod-vcf5.py -dns
+```
+If you want to deploy vCenter:
+```
+python3 hesiod-vcf5.py -vcs
 ```
