@@ -20,14 +20,17 @@ Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Pho
 sudo su
 ```
 ```
-cd /usr/local/hesiod/
+cd /usr/local/
 ```
 ```
 git clone https://github.com/boconnor2017/hesiod-vcf5
 ```
 ```
+cp -r hesiod/python/ hesiod-vcf5/hesiod
+```
+```
 cd hesiod-vcf5/
 ```
 ```
-python3 hesiod-vcf5.py
+python3 hesiod-vcf5.py 
 ```
