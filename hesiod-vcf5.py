@@ -32,8 +32,6 @@ def _main_():
     print("Standard run")
 
 def deploy_dns():
-    print("Deploy DNS...")
-    dnslib.change_ip_address_of_OS()
     dnslib.configure_tanium_prerequisites()
     dnslib.install_tanium()
     #token = dnslib.get_tanium_token()

@@ -6,6 +6,7 @@
 # Base imports
 import os
 import shutil
+import urllib
 
 '''
 This script needs to run on the Photon OS vm that is going to be the dedicated DNS server.
@@ -15,12 +16,16 @@ Workflow:
 01. Configure Tanium Prerequisites  
     02a. Run configure-tanium-ip-tables.sh script
         iptables -A INPUT -i eth0 -p udp --dport 53 -j ACCEPT
-        sh /usr/local/e2e-patterns/dns/saveiptables.sh
-            iptables-save >/etc/systemd/scripts/ip4save
+        iptables-save >/etc/systemd/scripts/ip4save
         iptables -L
         systemctl disable systemd-resolved.service
         systemctl stop systemd-resolved
-    02b. Run run-docker-compose.sh script 
+    02b. Run run-docker-compose 
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
+        mv /usr/local/e2e-patterns/dns/docker-compose.yml $HOME
+        docker-compose up -d
 02. Install Tanium
 03. Change Default Password
     04a. Get Token using admin/admin 
@@ -43,6 +48,14 @@ def configure_tanium_prerequisites():
     for x in config_tanium_cmds:
         cmd_returned_value = run_cmd_on_os(x)
         return cmd_returned_value
+
+def run_docker_compose():
+    config_tanium_cmds = []
+    config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
+    config_tanium_cmds.append("chmod +x /usr/local/bin/docker-compose")
+    config_tanium_cmds.append("docker-compose --version")
+    config_tanium_cmds.append("mv dns-deploy-docker-config/docker-compose.yml $HOME")
+    config_tanium_cmds.append("docker-compose up -d")
 
 # Install Tanium
 def install_tanium():
