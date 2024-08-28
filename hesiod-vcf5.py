@@ -4,7 +4,10 @@ from hesiod import lib_json as libjson
 from hesiod import lib_logs_and_headers as liblog 
 from hesiod import lib_paramiko as libpko 
 
-# Import other libraries
+# Import VCF libraries
+from lib import deploy_dns as dnslib
+
+# Import Standard Python libraries
 import os
 import sys
 
@@ -30,6 +33,14 @@ def _main_():
 
 def deploy_dns():
     print("Deploy DNS...")
+    dnslib.change_ip_address_of_OS()
+    dnslib.configure_tanium_prerequisites()
+    dnslib.install_tanium()
+    #token = dnslib.get_tanium_token()
+    token = ""
+    dnslib.get_tanium_token()
+    dnslib.change_tanium_password(token)
+    sys.exit()
 
 def deploy_vcsa():
     print("Deploy vCenter...")
