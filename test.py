@@ -1,3 +1,2 @@
-import hesiod_lib as heslib 
-
-print(heslib.hello_world())
+from hesiod import lib_general as heslibgen
+print(heslibgen.hello_world())

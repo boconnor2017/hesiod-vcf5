@@ -1,4 +1,8 @@
 {
+    "logs" : {
+        "test.py" : "_test.log",
+        "hesiod-vcf5.py" : "_hesiod-vcf5.log"
+    },
     "physical_network" : [{
         "default_gateway" : "172.16.0.1",
         "subnet_mask" : "255.255.255.0",
