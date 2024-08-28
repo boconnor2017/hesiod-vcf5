@@ -31,6 +31,11 @@ cp -r hesiod/python/ hesiod-vcf5/hesiod
 ```
 cd hesiod-vcf5/
 ```
+If your prerequisites (config files, vcenter, and dns) are ready to rock and roll:
 ```
 python3 hesiod-vcf5.py 
+```
+If you want to be prompted to edit lab variables:
+```
+python3 hesiod-vcf5.py -lav
 ```
