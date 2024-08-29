@@ -46,5 +46,27 @@
         "photon_os_password" : "VMware123!",
         "universal_password" : "VMware123!",
         "vcenter_administrator_sso_login" : "administrator@vsphere.local"
-    } 
+    },
+
+    "dns" : [{
+        "ip" : "172.16.10.9"
+    },
+    {
+        "ip" : "8.8.8.8"
+    }
+    ],
+
+    "ntp" : {
+        "server" : "pool.ntp.org"
+    },
+
+    "vcenter_server" : {
+        "deployment_network" : "VM Network", 
+        "deployment_datastore" : "datastore1",
+        "vm_name" : "hesvcf-vc01", 
+        "fqdn" : "hesvcf-vc01.hesiod.local",
+        "ip" : "172.16.10.20",
+        "cidr_size" : "24", 
+        "default_gateway" : "172.16.10.1"
+    }
 }

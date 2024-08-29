@@ -6,6 +6,7 @@ from hesiod import lib_paramiko as libpko
 
 # Import VCF libraries
 from lib import deploy_dns as dnslib
+from lib import deploy_vcenter as vcslib
 
 # Import Standard Python libraries
 import os
@@ -65,7 +66,33 @@ def deploy_dns():
     sys.exit()
 
 def deploy_vcsa():
-    print("Deploy vCenter...")
+    prereq_validation_check_1 = False 
+    prereq_validation_check_2 = False
+    prereq_validation_check_1 = vcslib.prereq_validate_iso()
+    prereq_validation_check_2 = vcslib.prereq_validate_dns_record()
+    if prereq_validation_check_1 is False:
+        sys.exit()
+    elif prereq_validation_check_2 is False:
+        sys.exit()
+    else:
+        print("Deploying vCenter Server.")
+        err = "    mount_vcsa_iso_to_os(): "
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = vcslib.mount_vcsa_iso_to_os()
+        err = "    cmd_returned_value: "+str(cmd_returned_value)
+        liblog.write_to_logs(err, logfile_name)
+        err = "    Importing vcsa8_json_template.json"
+        liblog.write_to_logs(err, logfile_name)
+        vcsa8_json_str = libjson.populate_var_from_json_file("lib/vcs-deploy-config", "vcsa8_json_template.json")
+        err = "    Converting json to python variable."
+        liblog.write_to_logs(err, logfile_name)
+        vcsa8_json_py = libjson.load_json_variable(vcsa8_json_str)
+        err = "    generate_json_file():"
+        liblog.write_to_logs(err, logfile_name)
+        new_vcsa_json_py = vcslib.generate_json_file(vcsa8_json_py, env_json_py)
+        err = "    dump_json_to_file():"
+        liblog.write_to_logs(err, logfile_name)        
+        libjson.dump_json_to_file(new_vcsa_json_py, "vcsa.json")
 
 def help_stdout():
     print("HELP MENU: hesiod-vcf5.py [options]")

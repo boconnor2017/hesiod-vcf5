@@ -1,4 +1,4 @@
-# Description: Builds Tanium DNS Server on a Node Controller
+# Description: Builds Tanium DNS Server using Photon OS
 # Author: Brendan O'Connor
 # Date: August 2024
 # Version: 4.0
