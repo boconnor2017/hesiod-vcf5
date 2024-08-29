@@ -73,15 +73,9 @@ def install_tanium():
     download_docker_compose = run_cmd_on_os("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
     os.chmod("/usr/local/bin/docker-compose", stat.S_IEXEC)
     shutil.copy("lib/dns-deploy-docker-config/docker-compose.yaml", os.getcwd())
+    run_cmd_on_os("systemctl stop systemd-resolved") #Reserves port 53 for some reason
     config_tanium_cmd = run_cmd_on_os("docker-compose up -d")
     return config_tanium_cmd
-    #config_tanium_cmds = []
-    #config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
-    #config_tanium_cmds.append("chmod +x /usr/local/bin/docker-compose")
-    #config_tanium_cmds.append("docker-compose --version")
-    #config_tanium_cmds.append("cp lib/dns-deploy-docker-config/docker-compose.yaml $PWD")
-    #config_tanium_cmds.append("docker-compose up -d")
-
 
 # Change Tanium default password
 def get_tanium_token(username, password, ip):
