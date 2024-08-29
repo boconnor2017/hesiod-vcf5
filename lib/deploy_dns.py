@@ -7,6 +7,7 @@
 from netifaces import AF_INET, AF_INET6, AF_LINK, AF_PACKET, AF_BRIDGE
 import netifaces as ni
 import os
+import stat 
 import shutil
 import urllib
 import requests
@@ -66,17 +67,21 @@ def configure_os_name_resolution(ip):
     file_text = "nameserver "+ip
     append_text_to_file(file_text, "resolv.conf")
     run_cmd_on_os("cp resolv.conf /etc/resolv.conf")
+    run_cmd_on_os("rm resolv.conf")
 
 def install_tanium():
-    config_tanium_cmds = []
-    config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
-    config_tanium_cmds.append("chmod +x /usr/local/bin/docker-compose")
-    config_tanium_cmds.append("docker-compose --version")
-    config_tanium_cmds.append("cp dns-deploy-docker-config/docker-compose.yaml $PWD")
-    config_tanium_cmds.append("docker-compose up -d")
-    for x in config_tanium_cmds:
-        cmd_returned_value = run_cmd_on_os(x)
-        return cmd_returned_value
+    download_docker_compose = run_cmd_on_os("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
+    os.chmod("/usr/local/bin/docker-compose", stat.S_IEXEC)
+    shutil.copy("lib/dns-deploy-docker-config/docker-compose.yaml", os.getcwd())
+    config_tanium_cmd = run_cmd_on_os("docker-compose up -d")
+    return config_tanium_cmd
+    #config_tanium_cmds = []
+    #config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
+    #config_tanium_cmds.append("chmod +x /usr/local/bin/docker-compose")
+    #config_tanium_cmds.append("docker-compose --version")
+    #config_tanium_cmds.append("cp lib/dns-deploy-docker-config/docker-compose.yaml $PWD")
+    #config_tanium_cmds.append("docker-compose up -d")
+
 
 # Change Tanium default password
 def get_tanium_token(username, password, ip):

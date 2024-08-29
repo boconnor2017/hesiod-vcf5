@@ -32,19 +32,23 @@ def _main_():
     print("Standard run")
 
 def deploy_dns():
-    err = "    configure_os_name_resolution(ip): "
-    liblog.write_to_logs(err, logfile_name)
-    dnslib.configure_os_name_resolution("8.8.8.8")
+    print("Deploying Tanium DNS Server.")
     err = "    configure_tanium_prerequisites(): "
     liblog.write_to_logs(err, logfile_name)
     cmd_returned_value = dnslib.configure_tanium_prerequisites()
     err = "    cmd_returned_value: "+str(cmd_returned_value)
     liblog.write_to_logs(err, logfile_name)
+    libgen.pause_python_for_duration(5)
+    err = "    configure_os_name_resolution(ip): "
+    liblog.write_to_logs(err, logfile_name)
+    dnslib.configure_os_name_resolution("8.8.8.8")
+    libgen.pause_python_for_duration(5)
     err = "    install_tanium(): "
     liblog.write_to_logs(err, logfile_name)
     cmd_returned_value = dnslib.install_tanium()
     err = "    cmd_returned_value: "+str(cmd_returned_value)
     liblog.write_to_logs(err, logfile_name)
+    libgen.pause_python_for_duration(60)
     err = "    get_ip_address(): "
     liblog.write_to_logs(err, logfile_name)
     ip = dnslib.get_ip_address("eth0")
