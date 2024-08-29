@@ -85,6 +85,6 @@ def install_vcenter_server(json_filename):
     cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
     cmd = cmd+"install "+json_filename+" "
     cmd = cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
-    cmd = cmd+">> /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log"
+    cmd = cmd+">> _vcsa-deploy.log"
     cmd_returned_value = run_cmd_on_os(cmd)
     return cmd_returned_value
