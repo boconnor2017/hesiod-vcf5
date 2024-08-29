@@ -35,19 +35,23 @@ If your prerequisites (config files, vcenter, and dns) are ready to rock and rol
 ```
 python3 hesiod-vcf5.py 
 ```
-If you want to be prompted to edit lab variables config:
+If you want to be prompted to edit lab variables use the `-lev` parameter:
 ```
 python3 hesiod-vcf5.py -lev
 ```
-If you want to be prompted to edit vcf bringup config:
+If you want to be prompted to edit VCF variables use the `-vcf` parameter
 ```
 python3 hesiod-vcf5.py -vcf
 ```
-If you want to deploy a DNS server:
+
+## Deploy a DNS Server
+If you want to deploy a DNS server, spin up a new PhotonOS VM and run hesiod-vcf with the `-dns` parameter:
 ```
 python3 hesiod-vcf5.py -dns
 ```
-If you want to deploy vCenter:
+
+## Deploy a vCenter Server
+If you want to deploy a vCenter server, spin up a new PhotonOS VM and run hesiod-vcf with the `-vcs` parameter:
 ```
 python3 hesiod-vcf5.py -vcs
 ```
