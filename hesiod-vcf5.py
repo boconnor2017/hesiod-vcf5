@@ -32,6 +32,9 @@ def _main_():
     print("Standard run")
 
 def deploy_dns():
+    err = "    configure_os_name_resolution(ip): "
+    liblog.write_to_logs(err, logfile_name)
+    dnslib.configure_os_name_resolution("8.8.8.8")
     err = "    configure_tanium_prerequisites(): "
     liblog.write_to_logs(err, logfile_name)
     cmd_returned_value = dnslib.configure_tanium_prerequisites()
@@ -42,10 +45,19 @@ def deploy_dns():
     cmd_returned_value = dnslib.install_tanium()
     err = "    cmd_returned_value: "+str(cmd_returned_value)
     liblog.write_to_logs(err, logfile_name)
-    #token = dnslib.get_tanium_token()
-    token = ""
-    dnslib.get_tanium_token()
-    dnslib.change_tanium_password(token)
+    err = "    get_ip_address(): "
+    liblog.write_to_logs(err, logfile_name)
+    ip = dnslib.get_ip_address("eth0")
+    err = "    ip address of DNS Server: "+ip
+    liblog.write_to_logs(err, logfile_name)
+    err = "    get_tanium_token(): "
+    liblog.write_to_logs(err, logfile_name)
+    token = dnslib.get_tanium_token("admin", "admin", ip)
+    err = "    token: "+token
+    liblog.write_to_logs(err, logfile_name)
+    err = "    change_tanium_password(): "
+    liblog.write_to_logs(err, logfile_name)
+    dnslib.change_tanium_password(token, ip, env_json_py["universal_authentication"]["universal_password"])
     sys.exit()
 
 def deploy_vcsa():

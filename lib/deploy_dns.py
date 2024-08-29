@@ -4,9 +4,12 @@
 # Version: 4.0
 
 # Base imports
+from netifaces import AF_INET, AF_INET6, AF_LINK, AF_PACKET, AF_BRIDGE
+import netifaces as ni
 import os
 import shutil
 import urllib
+import requests
 
 '''
 This script needs to run on the Photon OS vm that is going to be the dedicated DNS server.
@@ -33,6 +36,16 @@ Workflow:
     04c. Get Token using permanent password 
 '''
 # General
+def append_text_to_file(text, file_name):
+    new_file = open(file_name, "a")
+    new_file.writelines(text)
+    new_file.close()
+
+def get_ip_address(interface):
+    # Syntax of interface: eth0
+    ip = ni.ifaddresses('eth0')[AF_INET][0]['addr']
+    return ip
+
 def run_cmd_on_os(cmd):
     cmd_returned_value = os.system(cmd)
     return cmd_returned_value
@@ -49,6 +62,11 @@ def configure_tanium_prerequisites():
         cmd_returned_value = run_cmd_on_os(x)
         return cmd_returned_value
 
+def configure_os_name_resolution(ip):
+    file_text = "nameserver "+ip
+    append_text_to_file(file_text, "resolv.conf")
+    run_cmd_on_os("cp resolv.conf /etc/resolv.conf")
+
 def install_tanium():
     config_tanium_cmds = []
     config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
@@ -61,9 +79,14 @@ def install_tanium():
         return cmd_returned_value
 
 # Change Tanium default password
-def get_tanium_token():
-    print("get tanium token")
+def get_tanium_token(username, password, ip):
+    api_url = "http://"+ip+":5380"+"/api/user/login?user="+username+"&pass="+password+"&includeInfo=true"
+    api_response = requests.get(api_url)
+    tanium_token = (api_response.json()['token'])
+    return tanium_token
 
-def change_tanium_password(token):
-    print("Change password")
+def change_tanium_password(token, ip, new_password):
+    api_url = "http://"+ip+":5380"+"/api/user/changePassword?token="+token+"&pass="+new_password
+    api_response = requests.get(api_url)
+    return api_response
 
