@@ -91,8 +91,14 @@ def deploy_vcsa():
         liblog.write_to_logs(err, logfile_name)
         new_vcsa_json_py = vcslib.generate_json_file(vcsa8_json_py, env_json_py)
         err = "    dump_json_to_file():"
-        liblog.write_to_logs(err, logfile_name)        
-        libjson.dump_json_to_file(new_vcsa_json_py, "vcsa.json")
+        liblog.write_to_logs(err, logfile_name)      
+        json_filename = "vcsa.json"  # keep it simple
+        libjson.dump_json_to_file(new_vcsa_json_py, json_filename)
+        err = "    install_vcenter_server():"
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = vcslib.install_vcenter_server(json_filename)
+        err = "    cmd_returned_value: "+str(cmd_returned_value)
+        liblog.write_to_logs(err, logfile_name)
 
 def help_stdout():
     print("HELP MENU: hesiod-vcf5.py [options]")

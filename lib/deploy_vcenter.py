@@ -28,6 +28,10 @@ Workflow:
     02b. Write json file to OS
 
 03. Install vCenter
+    run_vcsa_installer_cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"install "+config.VCSA().json_filepath+config.VCSA().json_filename+" "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
+    run_vcsa_installer_cmd = run_vcsa_installer_cmd+">> /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log"
 '''
 # General
 def run_cmd_on_os(cmd):
@@ -59,9 +63,10 @@ def mount_vcsa_iso_to_os():
 def generate_json_file(vcsa_template_json, lab_environment_json):
     # Start by initializing from the template
     vcsa_new_json = vcsa_template_json
-    vcsa_new_json["new_vcsa"]["esxi"]["hostname"] = lab_environment_json["physical_server"]["ip_address"]
-    vcsa_new_json["new_vcsa"]["esxi"]["username"] = lab_environment_json["physical_server"]["username"]
-    vcsa_new_json["new_vcsa"]["esxi"]["password"] = lab_environment_json["physical_server"]["password"]
+    # Make changes to json_py variable 
+    vcsa_new_json["new_vcsa"]["esxi"]["hostname"] = lab_environment_json["physical_server"][0]["ip_address"]
+    vcsa_new_json["new_vcsa"]["esxi"]["username"] = lab_environment_json["physical_server"][0]["username"]
+    vcsa_new_json["new_vcsa"]["esxi"]["password"] = lab_environment_json["physical_server"][0]["password"]
     vcsa_new_json["new_vcsa"]["esxi"]["deployment_network"] = lab_environment_json["vcenter_server"]["deployment_network"]
     vcsa_new_json["new_vcsa"]["esxi"]["datastore"] = lab_environment_json["vcenter_server"]["deployment_datastore"]
     vcsa_new_json["new_vcsa"]["appliance"]["name"] = lab_environment_json["vcenter_server"]["vm_name"]
@@ -74,3 +79,12 @@ def generate_json_file(vcsa_template_json, lab_environment_json):
     vcsa_new_json["new_vcsa"]["os"]["ntp_servers"] = lab_environment_json["ntp"]["server"]
     vcsa_new_json["new_vcsa"]["sso"]["password"] = lab_environment_json["universal_authentication"]["universal_password"]
     return vcsa_new_json
+
+# Install vCener
+def install_vcenter_server(json_filename):
+    cmd = "sh /usr/local/mount/vcsa-cli-installer/lin64/./vcsa-deploy "
+    cmd = cmd+"install "+json_filename+" "
+    cmd = cmd+"--accept-eula --acknowledge-ceip --no-ssl-certificate-verification "
+    cmd = cmd+">> /usr/local/e2e-patterns/vcsa/_vcsa-deploy.log"
+    cmd_returned_value = run_cmd_on_os(cmd)
+    return cmd_returned_value
