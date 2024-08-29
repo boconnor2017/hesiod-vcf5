@@ -49,17 +49,16 @@ def configure_tanium_prerequisites():
         cmd_returned_value = run_cmd_on_os(x)
         return cmd_returned_value
 
-def run_docker_compose():
+def install_tanium():
     config_tanium_cmds = []
     config_tanium_cmds.append("curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose")
     config_tanium_cmds.append("chmod +x /usr/local/bin/docker-compose")
     config_tanium_cmds.append("docker-compose --version")
-    config_tanium_cmds.append("mv dns-deploy-docker-config/docker-compose.yml $HOME")
+    config_tanium_cmds.append("cp dns-deploy-docker-config/docker-compose.yaml $PWD")
     config_tanium_cmds.append("docker-compose up -d")
-
-# Install Tanium
-def install_tanium():
-    print("install tanium")
+    for x in config_tanium_cmds:
+        cmd_returned_value = run_cmd_on_os(x)
+        return cmd_returned_value
 
 # Change Tanium default password
 def get_tanium_token():

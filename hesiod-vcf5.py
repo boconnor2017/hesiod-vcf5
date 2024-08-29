@@ -32,8 +32,16 @@ def _main_():
     print("Standard run")
 
 def deploy_dns():
-    dnslib.configure_tanium_prerequisites()
-    dnslib.install_tanium()
+    err = "    configure_tanium_prerequisites(): "
+    liblog.write_to_logs(err, logfile_name)
+    cmd_returned_value = dnslib.configure_tanium_prerequisites()
+    err = "    cmd_returned_value: "+str(cmd_returned_value)
+    liblog.write_to_logs(err, logfile_name)
+    err = "    install_tanium(): "
+    liblog.write_to_logs(err, logfile_name)
+    cmd_returned_value = dnslib.install_tanium()
+    err = "    cmd_returned_value: "+str(cmd_returned_value)
+    liblog.write_to_logs(err, logfile_name)
     #token = dnslib.get_tanium_token()
     token = ""
     dnslib.get_tanium_token()
