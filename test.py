@@ -21,28 +21,66 @@ logfile_name = env_json_py["logs"][this_script_name]
 # SANDBOX AREA BELOW
 # # # # # # # # # # # # # # # # # # # #
 
+import test2 as config
+import json
+
 # Test parameters - DO NOT INCLUDE THIS IN COPY
 lab_environment_json = env_json_py
 vcsa8_json_str = libjson.populate_var_from_json_file("lib/vcs-deploy-config", "vcsa8_json_template.json")
 vcsa8_json_py = libjson.load_json_variable(vcsa8_json_str)
 vcsa_template_json = vcsa8_json_py
 
-# Start by initializing from the template
-vcsa_new_json = vcsa_template_json
-# Make changes to json_py variable 
+vcsa_config_json_as_string = {
+    "__version": "2.13.0",
+    "__comments": "https://github.com/boconnor2017/e2e-patterns",
+    "new_vcsa": {
+        "esxi": {
+            "hostname": config.E2EP_ENVIRONMENT().esxi_host_ip,
+            "username": config.E2EP_ENVIRONMENT().esxi_host_username,
+            "password": config.E2EP_ENVIRONMENT().esxi_host_password,
+            "deployment_network": config.E2EP_ENVIRONMENT().esxi_host_virtual_switch,
+            "datastore": config.E2EP_ENVIRONMENT().esxi_host_datastore
+        },
+        "appliance": {
+            "__comments": [
+                "E2E Pattern: deploy vcsa"
+            ],
+            "thin_disk_mode": True,
+            "deployment_option": "small",
+            "name": config.VCSA().vcsa_vm_name
+        },
+        "network": {
+            "ip_family": "ipv4",
+            "mode": "static",
+            "system_name": config.VCSA().fqdn,
+            "ip": config.VCSA().ip,
+            "prefix": config.E2EP_ENVIRONMENT().subnet_size,
+            "gateway": config.E2EP_ENVIRONMENT().default_gw,
+            "dns_servers": [
+                config.DNS().ip
+            ]
+        },
+        "os": {
+            "password": config.UNIVERSAL().password,
+            "ntp_servers": config.E2EP_ENVIRONMENT().ntp_server,
+            "ssh_enable": False
+        },
+        "sso": {
+            "password": config.UNIVERSAL().password,
+            "domain_name": config.VCSA().sso_domain
+        }
+    },
+    "ceip": {
+        "description": {
+            "__comments": [
+                "E2E Pattern"
+            ]
+        },
+        "settings": {
+            "ceip_enabled": True
+        }
+    }
+}
+vcsa_config_json = json.dumps(vcsa_config_json_as_string)
 
-print(vcsa_new_json["new_vcsa"]["esxi"]["hostname"] +"="+ lab_environment_json["physical_server"][0]["ip_address"])
-print(vcsa_new_json["new_vcsa"]["esxi"]["username"] +"="+ lab_environment_json["physical_server"][0]["username"])
-print(vcsa_new_json["new_vcsa"]["esxi"]["password"] +"="+ lab_environment_json["physical_server"][0]["password"])
-print(vcsa_new_json["new_vcsa"]["esxi"]["deployment_network"] +"="+ lab_environment_json["vcenter_server"]["deployment_network"])
-print(vcsa_new_json["new_vcsa"]["esxi"]["datastore"] +"="+ lab_environment_json["vcenter_server"]["deployment_datastore"])
-print(vcsa_new_json["new_vcsa"]["appliance"]["name"] +"="+ lab_environment_json["vcenter_server"]["vm_name"])
-print(vcsa_new_json["new_vcsa"]["network"]["system_name"] +"="+ lab_environment_json["vcenter_server"]["fqdn"])
-print(vcsa_new_json["new_vcsa"]["network"]["ip"] +"="+ lab_environment_json["vcenter_server"]["ip"])
-print(vcsa_new_json["new_vcsa"]["network"]["prefix"] +"="+ lab_environment_json["vcenter_server"]["cidr_size"])
-print(vcsa_new_json["new_vcsa"]["network"]["gateway"] +"="+ lab_environment_json["vcenter_server"]["default_gateway"])
-print(vcsa_new_json["new_vcsa"]["network"]["dns_servers"][0] +"="+ lab_environment_json["dns"][0])
-print(vcsa_new_json["new_vcsa"]["os"]["password"] +"="+ lab_environment_json["universal_authentication"]["universal_password"])
-print(vcsa_new_json["new_vcsa"]["os"]["ntp_servers"] +"="+ lab_environment_json["ntp"]["server"])
-print(vcsa_new_json["new_vcsa"]["sso"]["password"] +"="+ lab_environment_json["universal_authentication"]["universal_password"])
-
+libjson.dump_json_to_file(vcsa_config_json, "vcsa.json")

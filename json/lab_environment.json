@@ -48,12 +48,9 @@
         "vcenter_administrator_sso_login" : "administrator@vsphere.local"
     },
 
-    "dns" : [{
-        "ip" : "172.16.10.9"
-    },
-    {
-        "ip" : "8.8.8.8"
-    }
+    "dns" : [
+        "172.16.10.9",
+        "8.8.8.8"   
     ],
 
     "ntp" : {
