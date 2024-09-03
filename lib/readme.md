@@ -1,0 +1,2 @@
+# hesiod-vcf library
+Caution: look but do not touch anything in this library unless you are developing new capabilities for this repo. This library contains the "brain" of the operation. Any utested changes will cause failures. 

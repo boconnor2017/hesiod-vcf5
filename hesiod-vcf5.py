@@ -15,6 +15,8 @@ import sys
 # Import json configuration parameters
 env_json_str = libjson.populate_var_from_json_file("json", "lab_environment.json")
 env_json_py = libjson.load_json_variable(env_json_str)
+vcf_json_str = libjson.populate_var_from_json_file("json", "vcf5_bringup_template.json")
+vcf_json_py = libjson.load_json_variable(vcf_json_str)
 this_script_name = os.path.basename(__file__)
 logfile_name = env_json_py["logs"][this_script_name]
 
@@ -135,6 +137,7 @@ def match_vcs(args):
 def prompt_lab_environment_config():
     print("prompt lab env...")
 
+"""
 def prompt_user_for_options(user_options):
     prompt = input("Do you want to populate lab environment variables? [y/n] ")
     user_options.append(prompt)
@@ -143,9 +146,15 @@ def prompt_user_for_options(user_options):
     prompt = input("Do you want to deploy a DNS server? [y/n] ")
     user_options.append(prompt)
     return user_options
+"""
 
-def prompt_vcf_bringup_template():
-    print("prompt vcf env...")
+def prompt_vcf_bringup_template(vcf_json_py):
+    print("Running VCF5 Prerequisites JSON prompt function.")
+    new_vcf_json_py = vcf_json_py
+    new_vcf_json_py["sddcManagerSpec"]["hostname"] = input("SDDC Manager Hostname (default: "+vcf_json_py["sddcManagerSpec"]["hostname"]+"): ")
+    libjson.dump_json_to_file(new_vcf_json_py, "vcf.json") 
+    sys.exit()
+
 
 # Get args
 err = "Getting args..."
@@ -194,7 +203,7 @@ else:
   if match_found :
       err = "    -vcf found. Initiating vcf bringup prompts."
       liblog.write_to_logs(err, logfile_name)
-      prompt_vcf_bringup_template()
+      prompt_vcf_bringup_template(vcf_json_py)
       err = "    Exiting script."
       liblog.write_to_logs(err, logfile_name)
       sys.exit() 
