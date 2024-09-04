@@ -171,9 +171,9 @@ def prompt_vcf_bringup_template(vcf_json_py):
     print("")
     print("Part 4 of 11: Network Specs:")
     new_vcf_json_py["networkSpecs"][0]["subnet"] = input("Management Subnet (default: "+vcf_json_py["networkSpecs"][0]["subnet"]+"): ")
-    new_vcf_json_py["networkSpecs"][0]["gateway"] = input("Management Gateway (default: "+vcf_json_py["networkSpecs"][0]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][0]["gateway"] = input("Management Gateway (default: "+vcf_json_py["networkSpecs"][0]["gateway"]+"): ")
     new_vcf_json_py["networkSpecs"][1]["subnet"] = input("VSAN Subnet (default: "+vcf_json_py["networkSpecs"][1]["subnet"]+"): ")
-    new_vcf_json_py["networkSpecs"][1]["gateway"] = input("VSAN Gateway (default: "+vcf_json_py["networkSpecs"][1]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][1]["gateway"] = input("VSAN Gateway (default: "+vcf_json_py["networkSpecs"][1]["gateway"]+"): ")
     # Complexity that isn't needed in the prompt... keeping it simple... your welcome world.
     vsan_subnet = new_vcf_json_py["networkSpecs"][1]["subnet"].split(".")
     new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["startIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"7"
@@ -185,6 +185,11 @@ def prompt_vcf_bringup_template(vcf_json_py):
     # Back to standard programming...
     new_vcf_json_py["networkSpecs"][2]["subnet"] = input("VMOTION Subnet (default: "+vcf_json_py["networkSpecs"][2]["subnet"]+"): ")
     new_vcf_json_py["networkSpecs"][2]["gateway"] = input("VMOTION Gateway (default: "+vcf_json_py["networkSpecs"][2]["gateway"]+"): ")
+    # More complexitizing. 
+    vmotion_subnet = new_vcf_json_py["networkSpecs"][2]["subnet"].split(".")
+    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][1]["startIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"3"
+    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][1]["endIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"50"
+    # And... we're back.
     print("")
     print("Part 5 of 11: NSX-T Specs:")
     libjson.dump_json_to_file(new_vcf_json_py, "vcf.json") 
@@ -234,10 +239,10 @@ def prompt_vcf_bringup_template(vcf_json_py):
     print("")
     print("Part 11 of 11: Management Host Specs:")
     # Bulk prompt
-    esxi_host_subnet = input("ESXi Host Subnet: ")
-    esxi_host_cidr = input("ESXi Host CIDR: ")
-    esxi_host_gateway = input("ESXi Host Gateway: ")
-    esxi_association = input("ESXi Host Associated Datacenter: ")
+    esxi_host_subnet = input("ESXi Host Subnet (default: 255.255.255.0): ")
+    esxi_host_cidr = input("ESXi Host CIDR (default 10.0.0.0/24): ")
+    esxi_host_gateway = input("ESXi Host Gateway (default: 10.0.0.250): ")
+    esxi_association = input("ESXi Host Associated Datacenter (default: sfo-m01-dc01): ")
     new_vcf_json_py["hostSpecs"][0]["credentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
     new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["subnet"] = esxi_host_subnet
     new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["cidr"] = esxi_host_cidr
