@@ -151,8 +151,126 @@ def prompt_user_for_options(user_options):
 def prompt_vcf_bringup_template(vcf_json_py):
     print("Running VCF5 Prerequisites JSON prompt function.")
     new_vcf_json_py = vcf_json_py
+    print("Part 1 of 11: SDDC Manager Spec:")
     new_vcf_json_py["sddcManagerSpec"]["hostname"] = input("SDDC Manager Hostname (default: "+vcf_json_py["sddcManagerSpec"]["hostname"]+"): ")
+    new_vcf_json_py["sddcManagerSpec"]["ipAddress"] = input("SDDC IP Address (default: "+vcf_json_py["sddcManagerSpec"]["ipAddress"]+"): ")
+    new_vcf_json_py["sddcManagerSpec"]["netmask"] = input("SDDC Netmask (default: "+vcf_json_py["sddcManagerSpec"]["netmask"]+"): ")
+    new_vcf_json_py["sddcManagerSpec"]["localUserPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["sddcManagerSpec"]["rootUserCredentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
+    print("")
+    print("Part 2 of 11: Random stuff the BU decided to keep separate...:")
+    new_vcf_json_py["sddcId"] = input("SDDC ID (default: "+vcf_json_py["sddcId"]+"): ")
+    new_vcf_json_py["esxLicense"] = input("ESX License (default: "+vcf_json_py["esxLicense"]+"): ")
+    new_vcf_json_py["ntpServers"][0] = env_json_py["ntp"]["server"]
+    print("")
+    print("Part 3 of 11: DNS Spec:")
+    new_vcf_json_py["dnsSpec"]["subdomain"] = input("Subdomain (default: "+vcf_json_py["dnsSpec"]["subdomain"]+"): ")
+    new_vcf_json_py["dnsSpec"]["domain"] = input("Domain (default: "+vcf_json_py["dnsSpec"]["domain"]+"): ")
+    new_vcf_json_py["dnsSpec"]["nameserver"] = env_json_py["dns"][0]
+    new_vcf_json_py["dnsSpec"]["secondaryNameserver"] = env_json_py["dns"][1]
+    print("")
+    print("Part 4 of 11: Network Specs:")
+    new_vcf_json_py["networkSpecs"][0]["subnet"] = input("Management Subnet (default: "+vcf_json_py["networkSpecs"][0]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][0]["gateway"] = input("Management Gateway (default: "+vcf_json_py["networkSpecs"][0]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][1]["subnet"] = input("VSAN Subnet (default: "+vcf_json_py["networkSpecs"][1]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][1]["gateway"] = input("VSAN Gateway (default: "+vcf_json_py["networkSpecs"][1]["subnet"]+"): ")
+    # Complexity that isn't needed in the prompt... keeping it simple... your welcome world.
+    vsan_subnet = new_vcf_json_py["networkSpecs"][1]["subnet"].split(".")
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["startIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"7"
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["endIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"48"
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["startIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"3"
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["endIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"6"
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][0] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"50"
+    new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][1] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"49"
+    # Back to standard programming...
+    new_vcf_json_py["networkSpecs"][2]["subnet"] = input("VMOTION Subnet (default: "+vcf_json_py["networkSpecs"][2]["subnet"]+"): ")
+    new_vcf_json_py["networkSpecs"][2]["gateway"] = input("VMOTION Gateway (default: "+vcf_json_py["networkSpecs"][2]["gateway"]+"): ")
+    print("")
+    print("Part 5 of 11: NSX-T Specs:")
     libjson.dump_json_to_file(new_vcf_json_py, "vcf.json") 
+    new_vcf_json_py["nsxtSpec"]["nsxtManagerSize"] = input("NSX Manager Size (default: "+vcf_json_py["nsxtSpec"]["nsxtManagerSize"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][0]["hostname"] = input("NSX Manager A Hostname (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][0]["hostname"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][0]["ip"] = input("NSX Manager A IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][0]["ip"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["hostname"] = input("NSX Manager B Hostname (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["hostname"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["ip"] = input("NSX Manager B IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["ip"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["hostname"] = input("NSX Manager C Hostname (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["hostname"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"] = input("NSX Manager C IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["rootNsxtManagerPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["nsxtSpec"]["nsxtAdminPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["nsxtSpec"]["nsxtAuditPasswor"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"] = input("Overlay Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"] = input("Overlay Transport Zone Network Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"] = input("VLAN Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["vlanTransportZone"]["networkName"] = input("VLAN Transport Zone Network Name (default: "+vcf_json_py["nsxtSpec"]["vlanTransportZone"]["networkName"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["vip"] = input("NSX Manager Cluster VIP (default: "+vcf_json_py["nsxtSpec"]["vip"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["vipFqdn"] = input("NSX Manager Cluster VIP FQDN (default: "+vcf_json_py["nsxtSpec"]["vipFqdn"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["nsxtLicense"] = input("NSX License (default: "+vcf_json_py["nsxtSpec"]["nsxtLicense"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["name"] = input("ESXi Host Overlay TEP IP Pool (default: "+vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["name"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["ipAddressPoolRanges"][0]["start"] = input("IP Pool Ranges START (default: "+vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["ipAddressPoolRanges"][0]["start"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["ipAddressPoolRanges"][0]["end"] = input("IP Pool Ranges END (default: "+vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["ipAddressPoolRanges"][0]["end"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["cidr"] = input("CIDR (default: "+vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["cidr"]+"): ")
+    new_vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["gateway"] = input("Gateway (default: "+vcf_json_py["nsxtSpec"]["ipAddressPoolSpec"]["subnets"][0]["gateway"]+"): ")
+    print("")
+    print("Part 6 of 11: vSAN Specs:")
+    new_vcf_json_py["vsanSpec"]["vsanName"] = input("VSAN Datastore Name (default: "+vcf_json_py["vsanSpec"]["vsanName"]+"): ")
+    new_vcf_json_py["vsanSpec"]["licenseFile"] = input("VSAN License (default: "+vcf_json_py["vsanSpec"]["licenseFile"]+"): ")
+    new_vcf_json_py["vsanSpec"]["datastoreName"] = new_vcf_json_py["vsanSpec"]["vsanName"]
+    print("")
+    print("Part 7 of 11: DVS Specs:")
+    new_vcf_json_py["dvsSpecs"][0]["dvsName"] = input("DVS Name (default: "+vcf_json_py["dvsSpecs"][0]["dvsName"]+"): ")
+    print("")
+    print("Part 8 of 11: Cluster Specs:")
+    new_vcf_json_py["clusterSpec"]["clusterName"] = input("Compute Cluster Name (default: "+vcf_json_py["clusterSpec"]["clusterName"]+"): ")
+    print("")
+    print("Part 9 of 11: PSC Specs:")
+    new_vcf_json_py["pscSpecs"][0]["pscSsoSpec"]["ssoDomain"] = input("SSO Domain (default: "+vcf_json_py["pscSpecs"][0]["pscSsoSpec"]["ssoDomain"]+"): ")
+    new_vcf_json_py["pscSpecs"][0]["adminUserSsoPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    print("")
+    print("Part 10 of 11: vCenter Specs:")
+    new_vcf_json_py["vcenterSpec"]["vcenterIp"] = input("Management Domain vCenter IP (default: "+vcf_json_py["vcenterSpec"]["vcenterIp"]+"): ")
+    new_vcf_json_py["vcenterSpec"]["vcenterHostname"] = input("Management Domain vCenter Hostname (default: "+vcf_json_py["vcenterSpec"]["vcenterHostname"]+"): ")
+    new_vcf_json_py["vcenterSpec"]["licenseFile"] = input("vCenter License (default: "+vcf_json_py["vcenterSpec"]["licenseFile"]+"): ")
+    new_vcf_json_py["vcenterSpec"]["rootVcenterPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    print("")
+    print("Part 11 of 11: Management Host Specs:")
+    # Bulk prompt
+    esxi_host_subnet = input("ESXi Host Subnet: ")
+    esxi_host_cidr = input("ESXi Host CIDR: ")
+    esxi_host_gateway = input("ESXi Host Gateway: ")
+    esxi_association = input("ESXi Host Associated Datacenter: ")
+    new_vcf_json_py["hostSpecs"][0]["credentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["subnet"] = esxi_host_subnet
+    new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["cidr"] = esxi_host_cidr
+    new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["gateway"] = esxi_host_gateway
+    new_vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["ipAddress"] = input("ESXi 1 IP Address (default: "+vcf_json_py["hostSpecs"][0]["ipAddressPrivate"]["ipAddress"]+"): ")
+    new_vcf_json_py["hostSpecs"][0]["hostname"] = input("ESXi 1 Hostname (default: "+vcf_json_py["hostSpecs"][0]["hostname"]+"): ")
+    new_vcf_json_py["hostSpecs"][0]["association"] = esxi_association
+    new_vcf_json_py["hostSpecs"][1]["credentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["hostSpecs"][1]["ipAddressPrivate"]["subnet"] = esxi_host_subnet
+    new_vcf_json_py["hostSpecs"][1]["ipAddressPrivate"]["cidr"] = esxi_host_cidr
+    new_vcf_json_py["hostSpecs"][1]["ipAddressPrivate"]["gateway"] = esxi_host_gateway
+    new_vcf_json_py["hostSpecs"][1]["ipAddressPrivate"]["ipAddress"] = input("ESXi 1 IP Address (default: "+vcf_json_py["hostSpecs"][1]["ipAddressPrivate"]["ipAddress"]+"): ")
+    new_vcf_json_py["hostSpecs"][1]["hostname"] = input("ESXi 1 Hostname (default: "+vcf_json_py["hostSpecs"][1]["hostname"]+"): ")
+    new_vcf_json_py["hostSpecs"][1]["association"] = esxi_association
+    new_vcf_json_py["hostSpecs"][2]["credentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["hostSpecs"][2]["ipAddressPrivate"]["subnet"] = esxi_host_subnet
+    new_vcf_json_py["hostSpecs"][2]["ipAddressPrivate"]["cidr"] = esxi_host_cidr
+    new_vcf_json_py["hostSpecs"][2]["ipAddressPrivate"]["gateway"] = esxi_host_gateway
+    new_vcf_json_py["hostSpecs"][2]["ipAddressPrivate"]["ipAddress"] = input("ESXi 1 IP Address (default: "+vcf_json_py["hostSpecs"][2]["ipAddressPrivate"]["ipAddress"]+"): ")
+    new_vcf_json_py["hostSpecs"][2]["hostname"] = input("ESXi 1 Hostname (default: "+vcf_json_py["hostSpecs"][2]["hostname"]+"): ")
+    new_vcf_json_py["hostSpecs"][2]["association"] = esxi_association
+    new_vcf_json_py["hostSpecs"][3]["credentials"]["password"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["hostSpecs"][3]["ipAddressPrivate"]["subnet"] = esxi_host_subnet
+    new_vcf_json_py["hostSpecs"][3]["ipAddressPrivate"]["cidr"] = esxi_host_cidr
+    new_vcf_json_py["hostSpecs"][3]["ipAddressPrivate"]["gateway"] = esxi_host_gateway
+    new_vcf_json_py["hostSpecs"][3]["ipAddressPrivate"]["ipAddress"] = input("ESXi 1 IP Address (default: "+vcf_json_py["hostSpecs"][3]["ipAddressPrivate"]["ipAddress"]+"): ")
+    new_vcf_json_py["hostSpecs"][3]["hostname"] = input("ESXi 1 Hostname (default: "+vcf_json_py["hostSpecs"][3]["hostname"]+"): ")
+    new_vcf_json_py["hostSpecs"][3]["association"] = esxi_association
+    vcf_json_filename = "vcf.json"
+    libjson.dump_json_to_file(new_vcf_json_py, vcf_json_filename)
+    print("")
+    print("Completed!")
+    print("Your configuration is stored in a file called "+vcf_json_filename+". Save this configuration for future use.")
     sys.exit()
 
 
