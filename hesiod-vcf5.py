@@ -187,8 +187,8 @@ def prompt_vcf_bringup_template(vcf_json_py):
     new_vcf_json_py["networkSpecs"][2]["gateway"] = input("VMOTION Gateway (default: "+vcf_json_py["networkSpecs"][2]["gateway"]+"): ")
     # More complexitizing. 
     vmotion_subnet = new_vcf_json_py["networkSpecs"][2]["subnet"].split(".")
-    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][1]["startIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"3"
-    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][1]["endIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"50"
+    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][0]["startIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"3"
+    new_vcf_json_py["networkSpecs"][2]["includeIpAddressRanges"][0]["endIpAddress"] = vmotion_subnet[0]+"."+vmotion_subnet[1]+"."+vmotion_subnet[2]+"."+"50"
     # And... we're back.
     print("")
     print("Part 5 of 11: NSX-T Specs:")
