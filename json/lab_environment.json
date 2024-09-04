@@ -45,6 +45,7 @@
         "photon_os_username" : "hesiod-vcf",
         "photon_os_password" : "VMware123!",
         "universal_password" : "VMware123!",
+        "universal_long_password" : "VMware123!VMware123!",
         "vcenter_administrator_sso_login" : "administrator@vsphere.local"
     },
 
