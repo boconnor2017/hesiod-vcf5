@@ -200,9 +200,9 @@ def prompt_vcf_bringup_template(vcf_json_py):
     new_vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["ip"] = input("NSX Manager B IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][1]["ip"]+"): ")
     new_vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["hostname"] = input("NSX Manager C Hostname (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["hostname"]+"): ")
     new_vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"] = input("NSX Manager C IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"]+"): ")
-    new_vcf_json_py["nsxtSpec"]["rootNsxtManagerPassword"] = env_json_py["universal_authentication"]["universal_password"]
-    new_vcf_json_py["nsxtSpec"]["nsxtAdminPassword"] = env_json_py["universal_authentication"]["universal_password"]
-    new_vcf_json_py["nsxtSpec"]["nsxtAuditPasswor"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["nsxtSpec"]["rootNsxtManagerPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
+    new_vcf_json_py["nsxtSpec"]["nsxtAdminPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
+    new_vcf_json_py["nsxtSpec"]["nsxtAuditPasswor"] = env_json_py["universal_authentication"]["universal_long_password"]
     new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"] = input("Overlay Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"]+"): ")
     new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"] = input("Overlay Transport Zone Network Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"]+"): ")
     new_vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"] = input("VLAN Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"]+"): ")
