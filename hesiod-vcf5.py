@@ -157,6 +157,7 @@ def prompt_vcf_bringup_template(vcf_json_py):
     new_vcf_json_py["sddcManagerSpec"]["netmask"] = input("SDDC Netmask (default: "+vcf_json_py["sddcManagerSpec"]["netmask"]+"): ")
     new_vcf_json_py["sddcManagerSpec"]["localUserPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
     new_vcf_json_py["sddcManagerSpec"]["rootUserCredentials"]["password"] = env_json_py["universal_authentication"]["universal_long_password"]
+    new_vcf_json_py["sddcManagerSpec"]["secondUserCredentials"]["password"] = env_json_py["universal_authentication"]["universal_long_password"]
     print("")
     print("Part 2 of 11: Random stuff the BU decided to keep separate...:")
     new_vcf_json_py["sddcId"] = input("SDDC ID (default: "+vcf_json_py["sddcId"]+"): ")
