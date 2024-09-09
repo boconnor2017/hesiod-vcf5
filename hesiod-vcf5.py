@@ -202,7 +202,7 @@ def prompt_vcf_bringup_template(vcf_json_py):
     new_vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"] = input("NSX Manager C IP Address (default: "+vcf_json_py["nsxtSpec"]["nsxtManagers"][2]["ip"]+"): ")
     new_vcf_json_py["nsxtSpec"]["rootNsxtManagerPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
     new_vcf_json_py["nsxtSpec"]["nsxtAdminPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
-    new_vcf_json_py["nsxtSpec"]["nsxtAuditPasswor"] = env_json_py["universal_authentication"]["universal_long_password"]
+    new_vcf_json_py["nsxtSpec"]["nsxtAuditPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
     new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"] = input("Overlay Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["zoneName"]+"): ")
     new_vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"] = input("Overlay Transport Zone Network Name (default: "+vcf_json_py["nsxtSpec"]["overLayTransportZone"]["networkName"]+"): ")
     new_vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"] = input("VLAN Transport Zone Name (default: "+vcf_json_py["nsxtSpec"]["vlanTransportZone"]["zoneName"]+"): ")
@@ -229,13 +229,13 @@ def prompt_vcf_bringup_template(vcf_json_py):
     print("")
     print("Part 9 of 11: PSC Specs:")
     new_vcf_json_py["pscSpecs"][0]["pscSsoSpec"]["ssoDomain"] = input("SSO Domain (default: "+vcf_json_py["pscSpecs"][0]["pscSsoSpec"]["ssoDomain"]+"): ")
-    new_vcf_json_py["pscSpecs"][0]["adminUserSsoPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["pscSpecs"][0]["adminUserSsoPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
     print("")
     print("Part 10 of 11: vCenter Specs:")
     new_vcf_json_py["vcenterSpec"]["vcenterIp"] = input("Management Domain vCenter IP (default: "+vcf_json_py["vcenterSpec"]["vcenterIp"]+"): ")
     new_vcf_json_py["vcenterSpec"]["vcenterHostname"] = input("Management Domain vCenter Hostname (default: "+vcf_json_py["vcenterSpec"]["vcenterHostname"]+"): ")
     new_vcf_json_py["vcenterSpec"]["licenseFile"] = input("vCenter License (default: "+vcf_json_py["vcenterSpec"]["licenseFile"]+"): ")
-    new_vcf_json_py["vcenterSpec"]["rootVcenterPassword"] = env_json_py["universal_authentication"]["universal_password"]
+    new_vcf_json_py["vcenterSpec"]["rootVcenterPassword"] = env_json_py["universal_authentication"]["universal_long_password"]
     print("")
     print("Part 11 of 11: Management Host Specs:")
     # Bulk prompt
