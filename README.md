@@ -16,6 +16,8 @@ The following prerequisites are required to run hesiod-vcf5:
 # Quick Start
 Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Photon OS Quick Start](https://github.com/boconnor2017/hesiod/blob/main/photon/readme.md) readme file. 
 
+Next, install OVFTool by following the steps in the [Hesiod Install OVFTool on Photon OS](https://github.com/boconnor2017/hesiod/tree/main/ovftool) process.
+
 ```
 sudo su
 ```
