@@ -129,6 +129,12 @@ def deploy_esx():
         cmd_returned_value = esxlib.size_nested_esxi(nested_esxi_class)
         err = "    cmd_returned_value: "+str(cmd_returned_value)
         liblog.write_to_logs(err, logfile_name)
+        err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete sizing reboot."
+        liblog.write_to_logs(err, logfile_name)
+        esxlib.pause_python_for_duration(seconds)
+        err = "    Preparing ESXi host for VCF."
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py, physical_server_number)
 
 
 def help_stdout():

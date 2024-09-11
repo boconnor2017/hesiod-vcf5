@@ -74,7 +74,8 @@ def get_pcli_set_hard_disks_cmd(nested_esxi_class):
     cmd = "Set-HardDisk -HardDisk $nesxi_hard_disks[2] -CapacityGB "+nested_esxi_class.harddiskCapacityGB
     return cmd 
 
-def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
+def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
+    #physical_server_number is the host you are deploying to (default 0)
     script = []
     vmhosts_cmd = ""
     #Pull all hosts from lab json
@@ -84,15 +85,15 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
     vmhosts_cmd = vmhosts_cmd[:-2]
     cmd = "$vmhosts="+vmhosts_cmd
     script.append(cmd) 
-    cmd = "$ntp=\""+lab_json_py["ntp"]["server"]
+    cmd = "$ntp=\""+lab_json_py["ntp"]["server"]+"\""
     script.append(cmd)
-    cmd = "$esxi_user=\""+lab_json_py["physical_server"]["username"]
+    cmd = "$esxi_user=\""+lab_json_py["physical_server"][physical_server_number]["username"]+"\""
     script.append(cmd)
-    cmd = "$esxi_pwd=\""+lab_json_py["physical_server"]["password"]
+    cmd = "$esxi_pwd=\""+lab_json_py["physical_server"][physical_server_number]["password"]+"\""
     script.append(cmd)
     cmd = "$vSwitch=\"vSwitch0\"" #Hardcoded
     script.append(cmd)
-    cmd = "$pg=\""+lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
+    cmd = "$pg=\""+lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]+"\""
     script.append(cmd)
     cmd = "$vlanId=\"0\"" #Hardcoded
     script.append(cmd)
@@ -173,8 +174,8 @@ def prereq_validate_ova():
     else:
         return False 
 
-def prep_esxi_hosts_for_vcf(lab_json_py):
-    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py)
+def prep_esxi_hosts_for_vcf(lab_json_py, physical_server_number):
+    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number)
     pcli_script_name = "validate_esxi_for_vcf5.ps1"
     write_cmd_to_script_file(pcli_script, pcli_script_name)
     cmd = "pwsh "+pcli_script_name
