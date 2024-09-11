@@ -77,7 +77,7 @@
             "dir_path_to_ova_and_filename" : "/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova",
             "numCPU" : "8",
             "memoryGB" : "32",
-            "harddiskcapacityGB" : "150"
+            "harddiskcapacityGB" : "100"
         },
         "host_specs" : [{
             "name_of_vm" : "hesvcf-esx02",

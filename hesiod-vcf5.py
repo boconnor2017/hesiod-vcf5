@@ -35,10 +35,13 @@ liblog.write_to_logs(err, logfile_name)
 def _main_():
     print("Deploying ESXi environment ready for VCF Bringup.")
     print("IMPORTANT: while this is running, deploy Cloud Builder manually.")
+    print("(The reason cloud builder is manual is because its a waste of resources to automate the automation. Better to just do it manually even though it is POSSIBLE to automate it.)")
     print("")
-    host_number = int(input("Select the host number you want to deploy from \"host specs\" (0-3): "))
-    physical_server_number = 0
-    err = "    User selected host: "+str(host_number)
+    print("Estimated runtime: 15min (time to go grab a coffee).")
+    print("")
+    physical_server_number = int(input("Select the physical host number you want to deploy to (use 0 if you only have one physical server): "))
+    host_number = 0
+    err = "    Initiating class for host: "+str(host_number)
     liblog.write_to_logs(err, logfile_name)
     nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
     err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
@@ -58,8 +61,8 @@ def _main_():
     err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete sizing reboot."
     liblog.write_to_logs(err, logfile_name)
     esxlib.pause_python_for_duration(seconds)
-    physical_server_number = 1
-    err = "    User selected host: "+str(host_number)
+    host_number = 1
+    err = "    Initiating class for host: "+str(host_number)
     liblog.write_to_logs(err, logfile_name)
     nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
     err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
@@ -79,8 +82,8 @@ def _main_():
     err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete sizing reboot."
     liblog.write_to_logs(err, logfile_name)
     esxlib.pause_python_for_duration(seconds)
-    physical_server_number = 2
-    err = "    User selected host: "+str(host_number)
+    host_number = 2
+    err = "    Initiating class for host: "+str(host_number)
     liblog.write_to_logs(err, logfile_name)
     nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
     err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
@@ -100,8 +103,8 @@ def _main_():
     err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete sizing reboot."
     liblog.write_to_logs(err, logfile_name)
     esxlib.pause_python_for_duration(seconds)
-    physical_server_number = 3
-    err = "    User selected host: "+str(host_number)
+    host_number = 3
+    err = "    Initiating class for host: "+str(host_number)
     liblog.write_to_logs(err, logfile_name)
     nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
     err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
