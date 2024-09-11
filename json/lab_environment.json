@@ -76,24 +76,24 @@
             "deployment_datastore" : "datastore1",
             "dir_path_to_ova_and_filename" : "/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova",
             "numCPU" : "8",
-            "memoryGB" : "64",
-            "harddiskcapacityGB" : "200"
+            "memoryGB" : "32",
+            "harddiskcapacityGB" : "150"
         },
         "host_specs" : [{
-            "name_of_vm" : "test007",
-            "esxi_hostname" : "test007",
-            "esxi_ip_address" : "172.16.10.210"
+            "name_of_vm" : "hesvcf-esx02",
+            "esxi_hostname" : "hesvcf-esx02.hesiod.local",
+            "esxi_ip_address" : "172.16.10.23"
         },{
-            "name_of_vm" : "test008",
-            "esxi_hostname" : "test008",
-            "esxi_ip_address" : "172.16.10.211"
+            "name_of_vm" : "hesvcf-esx03",
+            "esxi_hostname" : "hesvcf-esx03.hesiod.local",
+            "esxi_ip_address" : "172.16.10.24"
         },{
-            "name_of_vm" : "test009",
-            "esxi_hostname" : "test009",
-            "esxi_ip_address" : "172.16.10.212"
+            "name_of_vm" : "hesvcf-esx04",
+            "esxi_hostname" : "hesvcf-esx04.hesiod.local",
+            "esxi_ip_address" : "172.16.10.25"
         },{
-            "name_of_vm" : "test010",
-            "esxi_hostname" : "test010",
-            "esxi_ip_address" : "172.16.10.213"
+            "name_of_vm" : "hesvcf-esx05",
+            "esxi_hostname" : "hesvcf-esx05.hesiod.local",
+            "esxi_ip_address" : "172.16.10.26"
         }]}
 }
