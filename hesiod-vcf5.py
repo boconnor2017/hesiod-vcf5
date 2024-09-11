@@ -109,7 +109,26 @@ def deploy_esx():
     if prereq_validation_check_1 is False:
         sys.exit()
     else:
-        print("Deploy ESXi")
+        print("Deploying Nested ESXi Server.")
+        host_number = input("Select the host number you want to deploy from \"host specs\": (0-3)")
+        err = "    User selected host: "+str(host_number)
+        liblog.write_to_logs(err, logfile_name)
+        nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number)
+        err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
+        err = "    cmd_returned_value: "+str(cmd_returned_value)
+        liblog.write_to_logs(err, logfile_name)
+        seconds = 90
+        err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete initial boot."
+        liblog.write_to_logs(err, logfile_name)
+        esxlib.pause_python_for_duration(seconds)
+        err = "    Sizing VM."
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = esxlib.size_nested_esxi(nested_esxi_class)
+        err = "    cmd_returned_value: "+str(cmd_returned_value)
+        liblog.write_to_logs(err, logfile_name)
+
 
 def help_stdout():
     print("HELP MENU: hesiod-vcf5.py [options]")

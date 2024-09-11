@@ -58,6 +58,8 @@
         "server" : "pool.ntp.org"
     },
 
+    "domain" : "hesiod.local",
+
     "vcenter_server" : {
         "deployment_network" : "VM Network", 
         "deployment_datastore" : "datastore1",
@@ -66,5 +68,32 @@
         "ip" : "172.16.10.20",
         "cidr_size" : "24", 
         "default_gateway" : "172.16.10.1"
-    }
+    },
+
+    "nested_esxi_servers" : {
+        "universal_specs" : {
+            "deployment_network" : "VM Network", 
+            "deployment_datastore" : "datastore1",
+            "dir_path_to_ova_and_filename" : "/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova",
+            "numCPU" : "8",
+            "memoryGB" : "64",
+            "harddiskcapacityGB" : "200"
+        },
+        "host_specs" : [{
+            "name_of_vm" : "test007",
+            "esxi_hostname" : "test007",
+            "esxi_ip_address" : "172.16.10.210"
+        },{
+            "name_of_vm" : "test008",
+            "esxi_hostname" : "test008",
+            "esxi_ip_address" : "172.16.10.211"
+        },{
+            "name_of_vm" : "test009",
+            "esxi_hostname" : "test009",
+            "esxi_ip_address" : "172.16.10.212"
+        },{
+            "name_of_vm" : "test010",
+            "esxi_hostname" : "test010",
+            "esxi_ip_address" : "172.16.10.213"
+        }]}
 }
