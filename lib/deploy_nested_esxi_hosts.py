@@ -87,9 +87,9 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     script.append(cmd) 
     cmd = "$ntp=\""+lab_json_py["ntp"]["server"]+"\""
     script.append(cmd)
-    cmd = "$esxi_user=\""+lab_json_py["physical_server"][physical_server_number]["username"]+"\""
+    cmd = "$esxi_user=\"root\"" #Hardcoded
     script.append(cmd)
-    cmd = "$esxi_pwd=\""+lab_json_py["physical_server"][physical_server_number]["password"]+"\""
+    cmd = "$esxi_pwd=\""+lab_json_py["universal_authentication"]["universal_password"]+"\""
     script.append(cmd)
     cmd = "$vSwitch=\"vSwitch0\"" #Hardcoded
     script.append(cmd)
@@ -100,7 +100,7 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     cmd = "$fwExceptions=\"NTP Client\"" #Hardcoded
     script.append(cmd)
     #PowerCLI non-editable script
-    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore"
+    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore -Confirm:$false"
     script.append(cmd)
     cmd = "$vmhosts | Foreach-Object {Connect-VIserver $_ -User $esxi_user -Password $esxi_pwd}"
     script.append(cmd)
@@ -112,7 +112,7 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     script.append(cmd)
     cmd = "Add-VMHostNtpServer -NtpServer $ntp -ErrorAction \"SilentlyContinue\""
     script.append(cmd)
-    cmd = "Get-VMHostService | Where-Object {$_.key -eq \"ntpd\"} | Set-VMHostService -policy \"on\" | Start-VMHostService"
+    cmd = "Get-VMHostService | Where-Object {$_.key -eq \"ntpd\"} | Set-VMHostService -policy \"on\" -Confirm:$false | Start-VMHostService -Confirm:$false" 
     script.append(cmd)
     cmd = "Get-VMHostService | Where-Object {$_.key -eq \"TSM-SSH\"} | Set-VMHostService -policy \"on\" -Confirm:$false | Restart-VMHostService -Confirm:$false"
     script.append(cmd)
