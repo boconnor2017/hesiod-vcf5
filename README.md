@@ -60,7 +60,7 @@ If you want to be prompted to edit lab variables use the `-lev` parameter to cre
 python3 hesiod-vcf5.py -lev
 ```
 ```
-mv lab.json /usr/local/drop/vcf.json
+mv lab.json /usr/local/drop/lab.json
 ```
 
 If you want to be prompted to edit VCF variables use the `-vcf` parameter to create a vcf.json file:
