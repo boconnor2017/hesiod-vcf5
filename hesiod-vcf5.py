@@ -7,6 +7,7 @@ from hesiod import lib_paramiko as libpko
 # Import VCF libraries
 from lib import deploy_dns as dnslib
 from lib import deploy_vcenter as vcslib
+from lib import deploy_nested_esxi_hosts as esxlib
 
 # Import Standard Python libraries
 import os
@@ -102,6 +103,14 @@ def deploy_vcsa():
         err = "    cmd_returned_value: "+str(cmd_returned_value)
         liblog.write_to_logs(err, logfile_name)
 
+def deploy_esx():
+    prereq_validation_check_1 = False 
+    prereq_validation_check_1 = esxlib.prereq_validate_ova()
+    if prereq_validation_check_1 is False:
+        sys.exit()
+    else:
+        print("Deploy ESXi")
+
 def help_stdout():
     print("HELP MENU: hesiod-vcf5.py [options]")
     print("Enter options 1x per run, do not add all parameters at once!")
@@ -110,6 +119,7 @@ def help_stdout():
     print("-vcf     option to prompt for vcf bringup variables.")
     print("-dns     option to deploy a DNS server.")
     print("-vcs     option to deploy a vCenter server.")
+    print("-esx     option to deploy a nested ESXi server.")
     print("None     default, assumes all config files are populated and DNS is available.")
     print("")
     print("")
@@ -120,6 +130,10 @@ def match_dns(args):
 
 def match_help(args):
     if '--help' in args:
+        return True
+
+def match_esx(args):
+    if '-esx' in args:
         return True
 
 def match_lev(args):
@@ -338,6 +352,16 @@ else:
       err = "    -vcs found. Initiating vCenter deployment."
       liblog.write_to_logs(err, logfile_name)
       deploy_vcsa()
+      err = "    Exiting script."
+      liblog.write_to_logs(err, logfile_name)
+      sys.exit() 
+
+  match_found = False 
+  match_found = match_esx(sys.argv)
+  if match_found :
+      err = "    -esx found. Initiating vCenter deployment."
+      liblog.write_to_logs(err, logfile_name)
+      deploy_esx()
       err = "    Exiting script."
       liblog.write_to_logs(err, logfile_name)
       sys.exit() 

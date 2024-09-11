@@ -104,6 +104,13 @@ def deploy_nested_esxi(nested_esxi_class):
     cmd_returned_value = run_cmd_on_os(deploy_nesxi_cmd)
     return cmd_returned_value
 
+def prereq_validate_ova():
+    prereq_validation_check = input("Is the Nested ESXi 8.0u3 ova downloaded to /usr/local/drop? (y/n): ")
+    if 'y' in prereq_validation_check:
+        return True 
+    else:
+        return False 
+    
 def size_nested_esxi(nested_esxi_class):
     size_nesxi_cmd = []
     confirmation_cmd = " -Confirm:$false"
