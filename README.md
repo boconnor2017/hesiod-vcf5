@@ -11,6 +11,8 @@ The following physical equipment is **required** to run hesiod-vcf5:
 
 The following binaries are **required** to run hesiod-vcf5:
 
+| Requirement | Description |
+|-------------|-------------|
 | PhotonOS OVA | version 5.0 recommended |
 | Nested ESXi Appliance | version 8.0U3 (the easiest approach is to download from [William Lam's blog](https://williamlam.com/nested-virtualization/nested-esxi-virtual-appliance)) |
 | VCF Cloud Builder Appliance | version 5.2 |
