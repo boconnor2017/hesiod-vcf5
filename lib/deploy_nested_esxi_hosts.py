@@ -104,17 +104,17 @@ def deploy_nested_esxi(nested_esxi_class):
     cmd_returned_value = run_cmd_on_os(deploy_nesxi_cmd)
     return cmd_returned_value
 
-def populate_nested_esxi_class_from_json(lab_json_py, host_number):
+def populate_nested_esxi_class_from_json(lab_json_py, host_number, physical_server_number):
     #lab_json_py is the python variable holding lab environment details
     #nested_esxi_class contains params for ONE esxi host at a time... therefore...
     #host_number is the list index for the given host (0-3 in a 4 node cluster)
     #hosts will be deployed to VCF Management Network by default
     class nested_esxi_class:
         deploy_to_this_port_group = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
-        deploy_to_this_datastore = ["nested_esxi_servers"]["universal_specs"]["deployment_datastore"]
-        name_of_vm = ["nested_esxi_servers"]["host_specs"][host_number]["name_of_vm"]
-        esxi_hostname = ["nested_esxi_servers"]["host_specs"][host_number]["esxi_hostname"]
-        esxi_ip_address = "esxi_ip_address"
+        deploy_to_this_datastore = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_datastore"]
+        name_of_vm = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["name_of_vm"]
+        esxi_hostname = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_hostname"]
+        esxi_ip_address = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_ip_address"]
         vlan = "0" #hardcoded
         netmask = lab_json_py["physical_network"][1]["subnet_mask"] #VCF Management Subnet
         gateway = lab_json_py["physical_network"][1]["default_gateway"] #VCF Management Subnet
@@ -124,11 +124,11 @@ def populate_nested_esxi_class_from_json(lab_json_py, host_number):
         syslog_ip_address = "192.168.0.1" #hardcoded
         nested_esxi_password = lab_json_py["universal_authentication"]["universal_password"]
         dir_path_of_ova = lab_json_py["nested_esxi_servers"]["universal_specs"]["dir_path_to_ova_and_filename"]
-        password_of_physical_host = lab_json_py["physical_server"]["password"]
-        deploy_to_this_host = lab_json_py["physical_server"]["ip_address"]
-        numCPU = ["nested_esxi_servers"]["universal_specs"]["numCPU"]
-        memoryGB = ["nested_esxi_servers"]["universal_specs"]["memoryGB"]
-        harddiskCapacityGB = ["nested_esxi_servers"]["universal_specs"]["harddiskcapacityGB"]
+        password_of_physical_host = lab_json_py["physical_server"][physical_server_number]["password"] 
+        deploy_to_this_host = lab_json_py["physical_server"][physical_server_number]["ip_address"]
+        numCPU = lab_json_py["nested_esxi_servers"]["universal_specs"]["numCPU"]
+        memoryGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["memoryGB"]
+        harddiskCapacityGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["harddiskcapacityGB"]
     return nested_esxi_class
 
 def prereq_validate_ova():

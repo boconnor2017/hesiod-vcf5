@@ -110,10 +110,11 @@ def deploy_esx():
         sys.exit()
     else:
         print("Deploying Nested ESXi Server.")
-        host_number = input("Select the host number you want to deploy from \"host specs\": (0-3)")
+        host_number = int(input("Select the host number you want to deploy from \"host specs\" (0-3): "))
+        physical_server_number = int(input("Select the physical host number you want to deploy to (use 0 if you only have one physical server): "))
         err = "    User selected host: "+str(host_number)
         liblog.write_to_logs(err, logfile_name)
-        nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number)
+        nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
         err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
         liblog.write_to_logs(err, logfile_name)
         cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
