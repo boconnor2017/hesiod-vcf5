@@ -74,18 +74,18 @@ mv vcf.json /usr/local/drop/vcf.json
 ## I'm a pro already, let's get on with it...
 If you need to copy your `-lev` config
 ```
-rm /json/lab*
+rm json/lab*
 ```
 ```
-cp /usr/local/drop/lab.json /json/lab_environment.json
+cp /usr/local/drop/lab.json json/lab_environment.json
 ```
 
 If you need to copy your `-vcf` config
 ```
-rm /json/vcf5*
+rm json/vcf5*
 ```
 ```
-cp /usr/local/drop/vcf.json /json/vcf5_bringup_template.json
+cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json
 ```
 
 If your `-lev` config file, your `-vcf` config file, and your VCF dns entries are ready to rock and roll:
