@@ -9,7 +9,7 @@ Steps to deploy nested esxi:
     3. Deploy OVA: uses ovftool. Note: --powerOn required for initial boot, otherwise properties won't pass from class.
     4. Sizing: uses PowerCLI. Note: Stop-VM required to configure CPU. Hot add not supported.
     5. VCF Prep Script: uses PowerCLI. 
-    
+
 """
 # General
 def delete_script_file(script_file_name):
@@ -74,6 +74,57 @@ def get_pcli_set_hard_disks_cmd(nested_esxi_class):
     cmd = "Set-HardDisk -HardDisk $nesxi_hard_disks[2] -CapacityGB "+nested_esxi_class.harddiskCapacityGB
     return cmd 
 
+def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
+    script = []
+    vmhosts_cmd = ""
+    #Pull all hosts from lab json
+    for hosts in lab_json_py["nested_esxi_servers"]["host_specs"]:
+        vmhosts_cmd = vmhosts_cmd+"\""+hosts["esxi_ip_address"]+"\", "
+    #Remove the last comma and space
+    vmhosts_cmd = vmhosts_cmd[:-2]
+    cmd = "$vmhosts="+vmhosts_cmd
+    script.append(cmd) 
+    cmd = "$ntp=\""+lab_json_py["ntp"]["server"]
+    script.append(cmd)
+    cmd = "$esxi_user=\""+lab_json_py["physical_server"]["username"]
+    script.append(cmd)
+    cmd = "$esxi_pwd=\""+lab_json_py["physical_server"]["password"]
+    script.append(cmd)
+    cmd = "$vSwitch=\"vSwitch0\"" #Hardcoded
+    script.append(cmd)
+    cmd = "$pg=\""+lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
+    script.append(cmd)
+    cmd = "$vlanId=\"0\"" #Hardcoded
+    script.append(cmd)
+    cmd = "$fwExceptions=\"NTP Client\"" #Hardcoded
+    script.append(cmd)
+    #PowerCLI non-editable script
+    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore"
+    script.append(cmd)
+    cmd = "$vmhosts | Foreach-Object {Connect-VIserver $_ -User $esxi_user -Password $esxi_pwd}"
+    script.append(cmd)
+    cmd = "Foreach ($svc in $fwExceptions){"
+    script.append(cmd)
+    cmd = "	Get-VMHostFirewallException | where {$_.name -eq $svc} | Set-VMhostFirewallException -Enabled:$true"
+    script.append(cmd)
+    cmd = "	}"
+    script.append(cmd)
+    cmd = "Add-VMHostNtpServer -NtpServer $ntp -ErrorAction \"SilentlyContinue\""
+    script.append(cmd)
+    cmd = "Get-VMHostService | Where-Object {$_.key -eq \"ntpd\"} | Set-VMHostService -policy \"on\" | Start-VMHostService"
+    script.append(cmd)
+    cmd = "Get-VMHostService | Where-Object {$_.key -eq \"TSM-SSH\"} | Set-VMHostService -policy \"on\" -Confirm:$false | Restart-VMHostService -Confirm:$false"
+    script.append(cmd)
+    cmd = "$vss = Get-VirtualSwitch -Name $vSwitch -VMHost (Get-VMHost)"
+    script.append(cmd)
+    cmd = "Set-VirtualSwitch $vss -Mtu 9000 -Confirm:$false  -ErrorAction \"SilentlyContinue\""
+    script.append(cmd)
+    cmd = "Get-VMHost | Get-VirtualPortGroup -Name $pg | Set-VirtualPortGroup -VLanId $vlanId"
+    script.append(cmd)
+    cmd = "Disconnect-Viserver \"*\" -Confirm:$false"
+    script.append(cmd)
+    return script
+
 def get_pcli_power_off_cmd(nested_esxi_class):
     cmd = "Stop-VM -VM \""+nested_esxi_class.name_of_vm+"\""
     return cmd
@@ -121,7 +172,15 @@ def prereq_validate_ova():
         return True 
     else:
         return False 
-    
+
+def prep_esxi_hosts_for_vcf(lab_json_py):
+    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py)
+    pcli_script_name = "validate_esxi_for_vcf5.ps1"
+    write_cmd_to_script_file(pcli_script, pcli_script_name)
+    cmd = "pwsh "+pcli_script_name
+    cmd_returned_value = run_cmd_on_os(cmd)
+    return cmd_returned_value   
+
 def size_nested_esxi(nested_esxi_class):
     size_nesxi_cmd = []
     confirmation_cmd = " -Confirm:$false"
