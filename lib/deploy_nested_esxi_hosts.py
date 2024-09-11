@@ -2,31 +2,15 @@ import os
 import time 
 
 """
-Sample Nested ESXi Class
+Steps to deploy nested esxi:
 
-class nested_esxi_class:
-    deploy_to_this_port_group = "VM Network"
-    deploy_to_this_datastore = "datastore1"
-    name_of_vm = "TEST 006I"
-    esxi_hostname = "test006"
-    esxi_ip_address = "172.16.10.210"
-    vlan = "0"
-    netmask = "255.255.255.0"
-    gateway = "172.16.10.1"
-    dns = "172.16.10.9"
-    domain = "hesiod.local"
-    ntp = "pool.ntp.org"
-    syslog_ip_address = "192.168.0.1"
-    nested_esxi_password = "VMware123!"
-    dir_path_of_ova = "/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova"
-    password_of_physical_host = "VMware1!"
-    deploy_to_this_host = "172.16.0.203"
-    numCPU = "8"
-    memoryGB = "64"
-    harddiskCapacityGB = "200"
-
+    1. Manual: user needs to download Nested OVA appliance to /usr/local/drop/ (recommended use William Lam's 8.0U3)
+    2. Populate Nested ESXi Class: variables are populated using lab environment json file
+    3. Deploy OVA: uses ovftool. Note: --powerOn required for initial boot, otherwise properties won't pass from class.
+    4. Sizing: uses PowerCLI. Note: Stop-VM required to configure CPU. Hot add not supported.
+    5. VCF Prep Script: uses PowerCLI. 
+    
 """
-
 # General
 def delete_script_file(script_file_name):
     if os.path.exists(script_file_name):
