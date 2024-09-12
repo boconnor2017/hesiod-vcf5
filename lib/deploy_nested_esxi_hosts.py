@@ -30,6 +30,14 @@ def write_cmd_to_script_file(script, script_file_name):
         script_file_name.writelines(line+'\n')
     script_file_name.close()
 
+# Prerequisites Validation
+def prereq_validate_ova():
+    prereq_validation_check = input("Is the Nested ESXi 8.0u3 ova downloaded to /usr/local/drop? (y/n): ")
+    if 'y' in prereq_validation_check:
+        return True 
+    else:
+        return False 
+
 # OVFTool
 def get_ovftool_deploy_nested_esxi_cmd(nested_esxi_class):
     cmd = "ovftool --acceptAllEulas --skipManifestCheck --X:injectOvfEnv "
@@ -54,24 +62,12 @@ def get_ovftool_deploy_nested_esxi_cmd(nested_esxi_class):
     return cmd
 
 # PowerCLI
-def get_pcli_set_powercliconfig_cmd():
-    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore"
-    return cmd 
-
 def get_pcli_connect_vi_server_cmd(nested_esxi_class):
     cmd = "Connect-VIserver -Server "+nested_esxi_class.deploy_to_this_host+" -User root -Password "+nested_esxi_class.password_of_physical_host
     return cmd 
 
-def get_pcli_set_vm_cmd(nested_esxi_class):
-    cmd = "Set-VM -VM \""+nested_esxi_class.name_of_vm+"\" -NumCPU "+nested_esxi_class.numCPU+" -MemoryGB "+nested_esxi_class.memoryGB
-    return cmd 
-
 def get_pcli_get_hard_disks_cmd(nested_esxi_class):
     cmd = "$nesxi_hard_disks = Get-HardDisk -VM \""+nested_esxi_class.name_of_vm+"\""
-    return cmd 
-
-def get_pcli_set_hard_disks_cmd(nested_esxi_class):
-    cmd = "Set-HardDisk -HardDisk $nesxi_hard_disks[2] -CapacityGB "+nested_esxi_class.harddiskCapacityGB
     return cmd 
 
 def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
@@ -104,6 +100,9 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     script.append(cmd)
     cmd = "$vmhosts | Foreach-Object {Connect-VIserver $_ -User $esxi_user -Password $esxi_pwd}"
     script.append(cmd)
+    #Nested ESXi hosts for some reason are in maint mode - this turns off maint mode
+    cmd = "$vmhosts | Foreach-Object {Get-VMHost -Name $_ | Set-VMHost -State Connected}"
+    script.append(cmd)
     cmd = "Foreach ($svc in $fwExceptions){"
     script.append(cmd)
     cmd = "	Get-VMHostFirewallException | where {$_.name -eq $svc} | Set-VMhostFirewallException -Enabled:$true"
@@ -133,6 +132,18 @@ def get_pcli_power_off_cmd(nested_esxi_class):
 def get_pcli_power_on_cmd(nested_esxi_class):
     cmd = "Start-VM -VM \""+nested_esxi_class.name_of_vm+"\""
     return cmd
+
+def get_pcli_set_powercliconfig_cmd():
+    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore"
+    return cmd 
+
+def get_pcli_set_hard_disks_cmd(nested_esxi_class):
+    cmd = "Set-HardDisk -HardDisk $nesxi_hard_disks[2] -CapacityGB "+nested_esxi_class.harddiskCapacityGB
+    return cmd 
+
+def get_pcli_set_vm_cmd(nested_esxi_class):
+    cmd = "Set-VM -VM \""+nested_esxi_class.name_of_vm+"\" -NumCPU "+nested_esxi_class.numCPU+" -MemoryGB "+nested_esxi_class.memoryGB
+    return cmd 
 
 # Custom
 def deploy_nested_esxi(nested_esxi_class):
@@ -166,13 +177,6 @@ def populate_nested_esxi_class_from_json(lab_json_py, host_number, physical_serv
         memoryGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["memoryGB"]
         harddiskCapacityGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["harddiskcapacityGB"]
     return nested_esxi_class
-
-def prereq_validate_ova():
-    prereq_validation_check = input("Is the Nested ESXi 8.0u3 ova downloaded to /usr/local/drop? (y/n): ")
-    if 'y' in prereq_validation_check:
-        return True 
-    else:
-        return False 
 
 def prep_esxi_hosts_for_vcf(lab_json_py, physical_server_number):
     pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number)
