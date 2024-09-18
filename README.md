@@ -1,5 +1,10 @@
 # Hesiod VCF5
-Uses [Project Hesiod](https://github.com/boconnor2017/hesiod) to initiate and launch a VCF 5 bringup ready environment using [Photon OS](https://vmware.github.io/photon/). The purpose of this project is to enable a hands on experience walking through the VCF Bringup by 1) accelerating the prerequisite work and 2) optimizing compute resources.
+Uses [Project Hesiod](https://github.com/boconnor2017/hesiod), a Photon based approach to initiate and launch a VCF 5 bringup ready environment. The purpose of this project is to facilitate hands on experience with the VCF Bringup using a nested environment. There are two goals with this project:
+
+| Goal | Description |
+|------|-------------|
+| Accelerate the Prerequisites Process | This project uses a CLI driven prompt to configure 2x backend JSON files. The prompt asks for critical VCF inputs to make the process as similar as if the user were deploying a standard OVA. **Optional:** this project comes with a DNS server. |
+| Reduce Hardware Resource Requirements | This project can run on a **SINGLE** ESXi host. All scripting in this repository interacts with the ESXi host directly, thus saving resources. | 
 
 # Prerequisites
 The following physical equipment is **required** to run hesiod-vcf5:
@@ -13,7 +18,7 @@ The following binaries are **required** to run hesiod-vcf5:
 
 | Requirement | Description |
 |-------------|-------------|
-| PhotonOS OVA | version 5.0 recommended |
+| PhotonOS OVA | version 5.0 recommended (download from [here](https://vmware.github.io/photon/).) |
 | Nested ESXi Appliance | version 8.0U3 (the easiest approach is to download from [William Lam's blog](https://williamlam.com/nested-virtualization/nested-esxi-virtual-appliance)) |
 | VCF Cloud Builder Appliance | version 5.2 |
 | 1x vSphere License | Minimum: 32 cores |
