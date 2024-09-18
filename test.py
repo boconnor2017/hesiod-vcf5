@@ -6,6 +6,7 @@ from hesiod import lib_paramiko as libpko
 
 # Import VCF libraries
 from lib import deploy_dns as dnslib
+from lib import deploy_nested_esxi_hosts as esxlib
 
 # Import Standard Python libraries
 import os
@@ -23,20 +24,39 @@ logfile_name = env_json_py["logs"][this_script_name]
 # SANDBOX AREA BELOW
 # # # # # # # # # # # # # # # # # # # #
 
-#test_subnet = "192.168.10.1"
-new_vcf_json_py = vcf_json_py
-# Complexity that isn't needed in the prompt... keeping it simple... your welcome world.
-vsan_subnet = new_vcf_json_py["networkSpecs"][1]["subnet"].split(".")
-new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["startIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"7"
-new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["endIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"48"
-new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["startIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"3"
-new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["endIpAddress"] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"6"
-new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][0] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"50"
-new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][1] = vsan_subnet[0]+"."+vsan_subnet[1]+"."+vsan_subnet[2]+"."+"49"
-# Back to standard programming...
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["startIpAddress"])
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][0]["endIpAddress"])
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["startIpAddress"])
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddressRanges"][1]["endIpAddress"])
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][0])
-print(new_vcf_json_py["networkSpecs"][1]["includeIpAddress"][1])
+"""
+ovftool --acceptAllEulas --skipManifestCheck --X:injectOvfEnv --net:"VM Network"="VM Network" --datastore="datastore1" --name="hesvcf-esx02" --powerOn --prop:guestinfo.hostname="hesvcf-esx02.hesiod.local" --prop:guestinfo.ipaddress="172.16.10.23" --prop:guestinfo.vlan="0" --prop:guestinfo.netmask="255.255.255.0" --prop:guestinfo.gateway="172.16.10.1" --prop:guestinfo.dns="172.16.10.9" --prop:guestinfo.domain="hesiod.local" --prop:guestinfo.ntp="pool.ntp.org" --prop:guestinfo.ssh=true --prop:guestinfo.syslog="192.168.0.1" --prop:guestinfo.password="VMware123!" --prop:guestinfo.createvmfs=false /usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova vi://"root":"VMware1!"@"172.16.0.203"
+
+ovftool --acceptAllEulas --skipManifestCheck --X:injectOvfEnv --net:"VM Network"="VM Network" \
+--datastore="datastore1" --name="DISKTEST-05" \
+--prop:guestinfo.hostname="somethinginteresting" \
+--prop:guestinfo.ipaddress="172.16.10.23" \
+--prop:guestinfo.vlan="0" \
+--prop:guestinfo.netmask="255.255.255.0" \
+--prop:guestinfo.gateway="172.16.10.1" \
+--prop:guestinfo.dns="172.16.10.9" \
+--prop:guestinfo.domain="hesiod.local" \
+--prop:guestinfo.ntp="pool.ntp.org" \
+--prop:guestinfo.ssh=true \
+--prop:guestinfo.syslog="192.168.0.1" \
+--prop:guestinfo.password="VMware123!" \
+--prop:guestinfo.createvmfs=false \
+--powerOn \
+--X:waitForIp \
+/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova \
+vi://"root":"VMware1!"@"172.16.0.203"
+
+$esxi1 = "172.16.10.23"
+Connect-VIServer -Server $esxi1 -User root -Password VMware123!
+$localDisk = Get-ScsiLun | where {$_.ExtensionData.DisplayName -match “Local LSI Disk”}
+$canName = $localDisk.CanonicalName
+$esxcli = Get-EsxCli -V2
+$satp = ($esxcli.storage.nmp.device.list() | where {$_.Device -eq $canName }).StorageArrayType
+$esxcli.storage.nmp.satp.rule.add($null,$null,$null,$canname,$null,$null,$null,”enable_ssd”,$null,$null,$satp,$null,$null,$null)
+$esxcli.storage.core.claiming.reclaim($canName)
+[/cc]
+"""
+
+nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, 0, 0)
+cmd = esxlib.get_ovftool_deploy_nested_esxi_cmd(nested_esxi_class)
+print(cmd)

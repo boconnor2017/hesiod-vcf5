@@ -1,5 +1,6 @@
 import os
 import time 
+import numpy
 
 """
 Steps to deploy nested esxi:
@@ -62,6 +63,28 @@ def get_ovftool_deploy_nested_esxi_cmd(nested_esxi_class):
     return cmd
 
 # PowerCLI
+def bugfix_get_script_to_convert_HDD_to_SDD():
+    #Bug: ovftool --prop:guestinfo.createvmfs=false doesn't pass to the nested esxi appliance
+    #Result: annoyingly, a datastore is created and Cloud Builder throws an SSD error during vSAN precheck
+    #This powershell script (esxcli) changes the 4GB Hard Drive to SSD, which is used for vSAN cache 
+    script = []
+    cmd = "$vmhosts | Foreach-Object {"
+    script.append(cmd)
+    cmd = "    $esxcli = Get-EsxCli -VMHost $_ -V2"
+    script.append(cmd)
+    cmd = "    $device_to_change_to_ssd = $esxcli.storage.hpp.device.list.Invoke()[1].Device"
+    script.append(cmd)
+    cmd = "    $set_esxcli_args = $esxcli.storage.hpp.device.set.CreateArgs()"
+    script.append(cmd)
+    cmd = "    $set_esxcli_args.device = $device_to_change_to_ssd"
+    script.append(cmd)
+    cmd = "    $set_esxcli_args.markdevicessd = \"true\""
+    script.append(cmd)
+    cmd = "    $esxcli.storage.hpp.device.set.Invoke($set_esxcli_args)"
+    script.append(cmd)
+    cmd = "}"
+    return script
+
 def get_pcli_connect_vi_server_cmd(nested_esxi_class):
     cmd = "Connect-VIserver -Server "+nested_esxi_class.deploy_to_this_host+" -User root -Password "+nested_esxi_class.password_of_physical_host
     return cmd 
@@ -121,6 +144,10 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     script.append(cmd)
     cmd = "Get-VMHost | Get-VirtualPortGroup -Name $pg | Set-VirtualPortGroup -VLanId $vlanId"
     script.append(cmd)
+    #BUGFIX - custom work to fix shennanigans using ovftool 
+    esxcli_bugfix_script = bugfix_get_script_to_convert_HDD_to_SDD()
+    script = numpy.concatenate((script, esxcli_bugfix_script))
+    #and we're back to normal programming...
     cmd = "Disconnect-Viserver \"*\" -Confirm:$false"
     script.append(cmd)
     return script
