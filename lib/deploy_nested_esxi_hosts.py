@@ -141,6 +141,7 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
     cmd = "    $esxcli.storage.hpp.device.set.Invoke($set_esxcli_args)"
     script.append(cmd)
     cmd = "}"
+    script.append(cmd)
     #and we're back to normal programming...
     cmd = "Disconnect-Viserver \"*\" -Confirm:$false"
     script.append(cmd)
