@@ -88,7 +88,7 @@ Build the VCF Ready nested ESXi environment
 python3 hesiod-vcf5.py 
 ```
 
-## I'm a VCF developer, I don't need everything...
+## PATH 3: I'm a VCF developer, I don't need everything...
 If you need a DNS server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-dns` parameter:
 ```
 python3 hesiod-vcf5.py -dns
