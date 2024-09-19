@@ -59,15 +59,7 @@ To create lab environment configuration, use the `-lev` parameter and walk throu
 python3 hesiod-vcf5.py -lev
 ```
 
-To create VCF variables use the `-vcf` parameter and walk through the CLI prompt:
-```
-python3 hesiod-vcf5.py -vcf
-```
-
-*CHECKPOINT: by now all network configurations (Management, VSAN, vMotion, and TEP VLANs) and DNS entries must be completed. If so, move on to **PATH 2** below.*
-
-## PATH 2: I'm a pro already, let's get on with it...
-Copy your `-lev` config
+Copy your `-lev` config to /json folder
 ```
 rm json/lab*
 ```
@@ -75,7 +67,12 @@ rm json/lab*
 cp /usr/local/drop/lab.json json/lab_environment.json
 ```
 
-Copy your `-vcf` config
+To create VCF variables use the `-vcf` parameter and walk through the CLI prompt:
+```
+python3 hesiod-vcf5.py -vcf
+```
+
+Copy your `-vcf` config to /json folder
 ```
 rm json/vcf5*
 ```
@@ -83,7 +80,10 @@ rm json/vcf5*
 cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json
 ```
 
-Run without parameters to build VCF Ready nested environment
+*CHECKPOINT: by now all network configurations (Management, VSAN, vMotion, and TEP VLANs), DNS entries, and configuration files must be completed. If so, move on to **PATH 2** below.*
+
+## PATH 2: I'm a pro already, let's get on with it...
+Build the VCF Ready nested ESXi environment
 ```
 python3 hesiod-vcf5.py 
 ```
