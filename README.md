@@ -55,29 +55,21 @@ cd hesiod-vcf5/
 ```
 
 ## This is my first time running this script...
-If you need a DNS server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-dns` parameter:
-```
-python3 hesiod-vcf5.py -dns
-```
+The first time you run this script you will need to setup your config files. Don't worry, the prompts below will guide you through the process.
 
-If you want to be prompted to edit lab variables use the `-lev` parameter to create a lab.json file:
+To create lab environment configuration, use the `-lev` parameter and walk through the CLI prompt:
 ```
 python3 hesiod-vcf5.py -lev
 ```
-```
-mv lab.json /usr/local/drop/lab.json
-```
 
-If you want to be prompted to edit VCF variables use the `-vcf` parameter to create a vcf.json file:
+To create VCF variables use the `-vcf` parameter and walk through the CLI prompt:
 ```
 python3 hesiod-vcf5.py -vcf
 ```
-```
-mv vcf.json /usr/local/drop/vcf.json
-```
+
 
 ## I'm a pro already, let's get on with it...
-If you need to copy your `-lev` config
+Copy your `-lev` config
 ```
 rm json/lab*
 ```
@@ -85,7 +77,7 @@ rm json/lab*
 cp /usr/local/drop/lab.json json/lab_environment.json
 ```
 
-If you need to copy your `-vcf` config
+Copy your `-vcf` config
 ```
 rm json/vcf5*
 ```
@@ -93,13 +85,18 @@ rm json/vcf5*
 cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json
 ```
 
-If your `-lev` config file, your `-vcf` config file, and your VCF dns entries are ready to rock and roll:
+Build your VCF Bringup Ready ESXi hosts:
 ```
 python3 hesiod-vcf5.py 
 ```
 
 ## I'm a VCF developer, I don't need everything...
-If you want to deploy a vCenter server, spin up a new PhotonOS VM and run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
+If you need a DNS server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-dns` parameter:
+```
+python3 hesiod-vcf5.py -dns
+```
+
+If you want to deploy a standalone vCenter server, spin up a new PhotonOS VM and run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
 1. lab_environment.json parameters are configured
 2. DNS entries are completed
 3. The vCenter ISO is mounted to the PhotonOS VM
@@ -107,7 +104,7 @@ If you want to deploy a vCenter server, spin up a new PhotonOS VM and run hesiod
 python3 hesiod-vcf5.py -vcs
 ```
 
-If you want to deploy a single nested ESXi server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-esx` parameter **after** you've completed these steps:
+If you want to deploy a standalone nested ESXi server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-esx` parameter **after** you've completed these steps:
 1. Download Nested ESXi OVA to `/usr/local/drop/`
 ```
 python3 hesiod-vcf5.py -esx

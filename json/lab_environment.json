@@ -4,96 +4,94 @@
         "hesiod-vcf5.py" : "_hesiod-vcf5.log"
     },
     "physical_network" : [{
-        "default_gateway" : "172.16.0.1",
-        "subnet_mask" : "255.255.255.0",
-        "cidr" : "24",
+        "default_gateway" : "<enter value here>",
+        "subnet_mask" : "<enter value here>",
+        "cidr" : "<enter value here>",
         "network_type" : "physical subnet"
     },
     {
-        "default_gateway" : "172.16.10.1",
-        "subnet_mask" : "255.255.255.0",
-        "cidr" : "24",
+        "default_gateway" : "<enter value here>",
+        "subnet_mask" : "<enter value here>",
+        "cidr" : "<enter value here>",
         "network_type" : "VCF Management subnet"
     },
     {
-        "default_gateway" : "172.16.11.1",
-        "subnet_mask" : "255.255.255.0",
-        "cidr" : "24",
+        "default_gateway" : "<enter value here>",
+        "subnet_mask" : "<enter value here>",
+        "cidr" : "<enter value here>",
         "network_type" : "VCF vSAN subnet"
     },
     {
-        "default_gateway" : "172.16.12.1",
-        "subnet_mask" : "255.255.255.0",
-        "cidr" : "24",
+        "default_gateway" : "<enter value here>",
+        "subnet_mask" : "<enter value here>",
+        "cidr" : "<enter value here>",
         "network_type" : "VCF TEP subnet"
     },
     {
-        "default_gateway" : "172.16.13.1",
-        "subnet_mask" : "255.255.255.0",
-        "cidr" : "24",
+        "default_gateway" : "<enter value here>",
+        "subnet_mask" : "<enter value here>",
+        "cidr" : "<enter value here>",
         "network_type" : "VCF vMotion subnet"
     }],
 
     "physical_server" : [{
         "username" : "root",
-        "password" : "VMware1!",
-        "ip_address" : "172.16.0.203",
+        "password" : "<enter value here>",
+        "ip_address" : "<enter value here>",
         "server_type" : "VCF Lab Nested Resources"
     }],
     
     "universal_authentication" : {
-        "photon_os_username" : "hesiod-vcf",
-        "photon_os_password" : "VMware123!",
-        "universal_password" : "VMware123!",
-        "universal_long_password" : "VMware123!VMware123!",
+        "universal_password" : "<enter value here>",
+        "universal_long_password" : "<enter value here>",
         "vcenter_administrator_sso_login" : "administrator@vsphere.local"
     },
 
     "dns" : [
-        "172.16.10.9",
-        "8.8.8.8"   
+        "<enter value here>",
+        "<enter value here>"   
     ],
 
     "ntp" : {
         "server" : "pool.ntp.org"
     },
 
-    "domain" : "hesiod.local",
+    "domain" : "<enter value here>",
 
     "vcenter_server" : {
-        "deployment_network" : "VM Network", 
-        "deployment_datastore" : "datastore1",
-        "vm_name" : "hesvcf-vc01", 
-        "fqdn" : "hesvcf-vc01.hesiod.local",
-        "ip" : "172.16.10.20",
-        "cidr_size" : "24", 
-        "default_gateway" : "172.16.10.1"
+        "deployment_network" : "<enter value here>", 
+        "deployment_datastore" : "<enter value here>",
+        "vm_name" : "<enter value here>", 
+        "fqdn" : "<enter value here>",
+        "ip" : "<enter value here>",
+        "cidr_size" : "<enter value here>", 
+        "default_gateway" : "<enter value here>"
     },
 
     "nested_esxi_servers" : {
         "universal_specs" : {
-            "deployment_network" : "VM Network", 
-            "deployment_datastore" : "datastore1",
+            "deployment_network" : "<enter value here>", 
+            "deployment_datastore" : "<enter value here>",
             "dir_path_to_ova_and_filename" : "/usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova",
             "numCPU" : "8",
             "memoryGB" : "32",
             "harddiskcapacityGB" : "100"
         },
         "host_specs" : [{
-            "name_of_vm" : "hesvcf-esx02",
-            "esxi_hostname" : "hesvcf-esx02.hesiod.local",
-            "esxi_ip_address" : "172.16.10.23"
+            "name_of_vm" : "<enter value here>",
+            "esxi_hostname" : "<enter value here>",
+            "esxi_ip_address" : "<enter value here>"
         },{
-            "name_of_vm" : "hesvcf-esx03",
-            "esxi_hostname" : "hesvcf-esx03.hesiod.local",
-            "esxi_ip_address" : "172.16.10.24"
+            "name_of_vm" : "<enter value here>",
+            "esxi_hostname" : "<enter value here>",
+            "esxi_ip_address" : "<enter value here>"
         },{
-            "name_of_vm" : "hesvcf-esx04",
-            "esxi_hostname" : "hesvcf-esx04.hesiod.local",
-            "esxi_ip_address" : "172.16.10.25"
+            "name_of_vm" : "<enter value here>",
+            "esxi_hostname" : "<enter value here>",
+            "esxi_ip_address" : "<enter value here>"
         },{
-            "name_of_vm" : "hesvcf-esx05",
-            "esxi_hostname" : "hesvcf-esx05.hesiod.local",
-            "esxi_ip_address" : "172.16.10.26"
+            "name_of_vm" : "<enter value here>",
+            "esxi_hostname" : "<enter value here>",
+            "esxi_ip_address" : "<enter value here>"
         }]}
 }

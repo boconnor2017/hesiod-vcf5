@@ -208,6 +208,34 @@ def prep_esxi_hosts_for_vcf(lab_json_py, physical_server_number):
     cmd_returned_value = run_cmd_on_os(cmd)
     return cmd_returned_value   
 
+def reboot_esxi_hosts(lab_json_py):
+    script = []
+    vmhosts_cmd = ""
+    #Pull all hosts from lab json
+    for hosts in lab_json_py["nested_esxi_servers"]["host_specs"]:
+        vmhosts_cmd = vmhosts_cmd+"\""+hosts["esxi_ip_address"]+"\", "
+    #Remove the last comma and space
+    vmhosts_cmd = vmhosts_cmd[:-2]
+    cmd = "$vmhosts="+vmhosts_cmd
+    script.append(cmd) 
+    cmd = "$esxi_user=\"root\"" #Hardcoded
+    script.append(cmd)
+    cmd = "$esxi_pwd=\""+lab_json_py["universal_authentication"]["universal_password"]+"\""
+    script.append(cmd)
+    #PowerCLI non-editable script
+    cmd = "Set-PowerCLIConfiguration -InvalidCertificateAction ignore -Confirm:$false"
+    script.append(cmd)
+    cmd = "$vmhosts | Foreach-Object {Connect-VIserver $_ -User $esxi_user -Password $esxi_pwd}"
+    script.append(cmd)
+    #Reboot
+    cmd = "$vmhosts | Foreach-Object {Restart-VMHost -VMHost $_ -Force -Confirm:$false}"
+    script.append(cmd)
+    pcli_script_name = "reboot_esxi_hosts.ps1"
+    write_cmd_to_script_file(script, pcli_script_name)
+    cmd = "pwsh "+pcli_script_name
+    cmd_returned_value = run_cmd_on_os(cmd)
+    return cmd_returned_value
+
 def size_nested_esxi(nested_esxi_class):
     size_nesxi_cmd = []
     confirmation_cmd = " -Confirm:$false"
