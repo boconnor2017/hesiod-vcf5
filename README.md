@@ -18,29 +18,26 @@ The following binaries are **required** to run hesiod-vcf5:
 
 | Requirement | Description |
 |-------------|-------------|
-| PhotonOS OVA | version 5.0 recommended (download from [here](https://vmware.github.io/photon/).) |
-| Nested ESXi Appliance | version 8.0U3 (the easiest approach is to download from [William Lam's blog](https://williamlam.com/nested-virtualization/nested-esxi-virtual-appliance)) |
-| VCF Cloud Builder Appliance | version 5.2 |
-| 1x vSphere License | Minimum: 32 cores |
-| 1x vSAN License | No minimums |
-| 1x vCenter License | No minimums |
-| 1x NSX License | No minimums |
+| PhotonOS OVA | version 5.0 recommended (download from [VMware GitHub](https://vmware.github.io/photon/)) |
+| Nested ESXi Appliance | version 8.0U3 (download from [William Lam](https://williamlam.com/nested-virtualization/nested-esxi-virtual-appliance)) |
+| VCF Cloud Builder Appliance | version 5.2 (download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home)) |
+| 1x vSphere License | Minimum: 32 cores download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home) |
+| 1x vSAN License | No minimums download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home) |
+| 1x vCenter License | No minimums download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home) |
+| 1x NSX License | No minimums download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home) |
 
 **Optional:** for more advanced automation development capabilities with Python, Terraform, Ansible, etc you can use hesiod-vcf to deploy a vCenter Server. Note that more physical resources may be required to support this. 
 
 |Requirement | Description |
 |------------|-------------|
-| VMware vCenter Server Appliance | VMware-VCSA-all-8.0.3-24022515.iso |
+| VMware vCenter Server Appliance version 8.0U3 | download from [Broadcom portal](https://community.broadcom.com/vmware-cloud-foundation/home) |
 
 # Quick Start
-Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Photon OS Quick Start](https://github.com/boconnor2017/hesiod/blob/main/photon/readme.md) readme file. 
+Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Photon OS Quick Start](https://github.com/boconnor2017/hesiod/blob/main/photon/readme.md) readme file to prep the Photon server for VCF. 
 
 Next, install OVFTool by following the steps in the [Hesiod Install OVFTool on Photon OS](https://github.com/boconnor2017/hesiod/tree/main/ovftool) process.
 
-Recommended: run these scripts as root
-```
-sudo su
-```
+*Recommended: run these scripts as root.*
 ```
 cd /usr/local/
 ```
@@ -54,7 +51,7 @@ cp -r hesiod/python/ hesiod-vcf5/hesiod
 cd hesiod-vcf5/
 ```
 
-## This is my first time running this script...
+## PATH 1: This is my first time running this script...
 The first time you run this script you will need to setup your config files. Don't worry, the prompts below will guide you through the process.
 
 To create lab environment configuration, use the `-lev` parameter and walk through the CLI prompt:
@@ -67,8 +64,9 @@ To create VCF variables use the `-vcf` parameter and walk through the CLI prompt
 python3 hesiod-vcf5.py -vcf
 ```
 
+*CHECKPOINT: by now all network configurations (Management, VSAN, vMotion, and TEP VLANs) and DNS entries must be completed. If so, move on to **PATH 2** below.*
 
-## I'm a pro already, let's get on with it...
+## PATH 2: I'm a pro already, let's get on with it...
 Copy your `-lev` config
 ```
 rm json/lab*
@@ -85,7 +83,7 @@ rm json/vcf5*
 cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json
 ```
 
-Build your VCF Bringup Ready ESXi hosts:
+Run without parameters to build VCF Ready nested environment
 ```
 python3 hesiod-vcf5.py 
 ```
