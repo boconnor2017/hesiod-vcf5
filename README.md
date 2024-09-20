@@ -67,7 +67,7 @@ rm json/lab*
 cp /usr/local/drop/lab.json json/lab_environment.json
 ```
 
-To create VCF variables use the `-vcf` parameter and walk through the CLI prompt:
+To create VCF configuration use the `-vcf` parameter and walk through the CLI prompt:
 ```
 python3 hesiod-vcf5.py -vcf
 ```
@@ -106,4 +106,11 @@ If you want to deploy a standalone nested ESXi server, spin up a new PhotonOS VM
 1. Download Nested ESXi OVA to `/usr/local/drop/`
 ```
 python3 hesiod-vcf5.py -esx
+```
+
+## PATH 4: I don't want to build anything, I just want to validate my configuration files...
+The `-validate-N` parameters are a nifty real world tool that generates a markdown file with the values from a configuration file. Import these markdown files to [Visual Studio](https://visualstudio.microsoft.com/), install the [Markdown PDF Extension for visual studio](https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf), and export to PDF. 
+
+```
+python3 hesiod-vcf5.py -validate-vcf
 ```
