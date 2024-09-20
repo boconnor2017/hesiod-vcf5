@@ -107,10 +107,3 @@ If you want to deploy a standalone nested ESXi server, spin up a new PhotonOS VM
 ```
 python3 hesiod-vcf5.py -esx
 ```
-
-## PATH 4: I don't want to build anything, I just want to validate my configuration files...
-The `-validate-N` parameters are a nifty real world tool that generates a markdown file with the values from a configuration file. Import these markdown files to [Visual Studio](https://visualstudio.microsoft.com/), install the [Markdown PDF Extension for visual studio](https://marketplace.visualstudio.com/items?itemName=yzane.markdown-pdf), and export to PDF. 
-
-```
-python3 hesiod-vcf5.py -validate-vcf
-```
