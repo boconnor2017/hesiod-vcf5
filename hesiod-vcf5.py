@@ -256,7 +256,6 @@ def help_stdout():
     print("-dns     option to deploy a DNS server.")
     print("-vcs     option to deploy a vCenter server.")
     print("-esx     option to deploy a nested ESXi server.")
-    print("-validate-vcf  option to create a markdown file of a vcf.json configuration.")
     print("None     default, assumes all config files are populated and DNS is available.")
     print("")
     print("")
@@ -284,15 +283,6 @@ def match_vcf(args):
 def match_vcs(args):
     if '-vcs' in args:
         return True
-
-def match_valvcs(args):
-    if '-validate-vcf' in args:
-        return True
-
-def validate_vcf(vcf_json_py):
-    script = mdlib.get_validate_vcf_md_script(vcf_json_py)
-    md_script_name = "vcf-validation.md" #hardcoded
-    mdlib.write_cmd_to_script_file(script, md_script_name)
 
 # Get args
 err = "Getting args..."
@@ -362,16 +352,6 @@ else:
       err = "    -esx found. Initiating ESXi deployment."
       liblog.write_to_logs(err, logfile_name)
       deploy_esx()
-      err = "    Exiting script."
-      liblog.write_to_logs(err, logfile_name)
-      sys.exit() 
-
-  match_found = False 
-  match_found = match_valvcs(sys.argv)
-  if match_found :
-      err = "    -validate-vcf found. Initiating validation of VCF configuration."
-      liblog.write_to_logs(err, logfile_name)
-      validate_vcf(vcf_json_py)
       err = "    Exiting script."
       liblog.write_to_logs(err, logfile_name)
       sys.exit() 
