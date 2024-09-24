@@ -170,6 +170,8 @@ def prompt_lab_environment_config(env_json_py):
         new_env_json_py["physical_server"][i]["username"] = "root" #hardcoded
         new_env_json_py["physical_server"][i]["password"] = input("Password: ")
         new_env_json_py["physical_server"][i]["ip_address"] = input("IP Address: ")
+        new_env_json_py["physical_server"][i]["deploy_vms_to_this_network"] = input("Network where you want to deploy VMs (example: VM Network): ")
+        new_env_json_py["physical_server"][i]["deploy_vms_to_this_datastore"] = input("Datastore where you want to deploy VMs (example: datastore1): ")
         i = i+1
     print("")
     print("Part 4 of 7 - Universal Authentication.")
@@ -190,19 +192,22 @@ def prompt_lab_environment_config(env_json_py):
     new_env_json_py["domain"] = input("Domain: ")
     print("")
     print("Part 6 of 7 - vCenter.")
-    print("** For development teams who need a vCenter. If you don't need a vCenter you can keep these parameters blank. **")
-    new_env_json_py["vcenter_server"]["deployment_network"] = input("Name of the deployment network on your physical host (example: VM Network): ")
-    new_env_json_py["vcenter_server"]["deployment_datastore"] = input("Name of the deployment datastore on your physical host (example: datastore1): ")
+    print("** For development teams who need a vCenter. **")
     new_env_json_py["vcenter_server"]["vm_name"] = input("Name of the VCSA virtual machine: ")
     new_env_json_py["vcenter_server"]["fqdn"] = input("FQDN of the vCenter Server: ")
     new_env_json_py["vcenter_server"]["ip"] = input("IP Address of the vCenter Server: ")
-    new_env_json_py["vcenter_server"]["cidr_size"] = input("CIDR of the vCenter Server (example: 24): ")
-    new_env_json_py["vcenter_server"]["default_gateway"] = input("Default Gateway of the vCenter Server: ")
+    number_of_networks = len(env_json_py["physical_network"])
+    vcenter_network = input("Which physical network do you want to use to configure this vCenter? (Select: 0-"+str(number_of_networks)+") ")
+    new_env_json_py["vcenter_server"]["deploy_to_physical_network"] = int(vcenter_network)
+    number_of_servers = len(env_json_py["physical_server"])
+    if (number_of_servers-1) == 0:
+        vcenter_server = 0
+    else:
+        vcenter_server = input("Which physical server do you want to use to deploy this vCenter? (Select: 0-"+str(number_of_servers)+") ")
+    new_env_json_py["vcenter_server"]["deploy_to_physical_host"] = int(vcenter_server)
     print("")
     print("Part 7 of 7 - Nested ESXi.")
     print("** The specs for the nested ESXi hosts (you need these for your VCF environment). **")
-    new_env_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"] = input("(ALL ESXI HOSTS) Name of the deployment network on your physical host (example: VM Network): ")
-    new_env_json_py["nested_esxi_servers"]["universal_specs"]["deployment_datastore"] = input("(ALL ESXI HOSTS) Name of the deployment datastore on your physical host (example: datastore1): ")
     new_env_json_py["nested_esxi_servers"]["universal_specs"]["dir_path_to_ova_and_filename"] = input("The path to the nested esxi ova on the photon server (example: /usr/local/drop/Nested_ESXi8.0u3_Appliance_Template_v1.ova): ")
     new_env_json_py["nested_esxi_servers"]["universal_specs"]["numCPU"] = input("(ALL ESXI HOSTS) Number of CPUs (Recommended: 8): ")
     new_env_json_py["nested_esxi_servers"]["universal_specs"]["memoryGB"] = input("(ALL ESXI HOSTS) Memory in GB (Recommended: 32): ")
@@ -214,6 +219,13 @@ def prompt_lab_environment_config(env_json_py):
         new_env_json_py["nested_esxi_servers"]["host_specs"][i]["name_of_vm"] = input("VM Name: ")
         new_env_json_py["nested_esxi_servers"]["host_specs"][i]["esxi_hostname"] = input("ESXi Hostname: ")
         new_env_json_py["nested_esxi_servers"]["host_specs"][i]["esxi_ip_address"] = input("ESXi IP Address: ")
+        if (number_of_servers-1) == 0:
+            deploy_to_esxi_server = 0
+        else:
+            deploy_to_esxi_server = input("Which physical host do you want to use to deploy this VM? (Select: 0-"+str(number_of_servers)+") ")
+        new_env_json_py["nested_esxi_servers"]["host_specs"][i]["deploy_to_physical_host"] = int(deploy_to_esxi_server)
+        deploy_to_physical_network = deploy_to_esxi_server #Hardcoded
+        new_env_json_py["nested_esxi_servers"]["host_specs"][i]["deploy_to_physical_network"] = int(deploy_to_physical_network)
         i = i+1
     lab_json_filename = "lab.json"
     libjson.dump_json_to_file(new_env_json_py, lab_json_filename)
