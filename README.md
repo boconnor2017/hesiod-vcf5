@@ -90,7 +90,7 @@ python3 hesiod-vcf5.py
 ```
 
 ## PATH 3: I'm a VCF developer, I don't need everything...
-If you want to deploy a standalone vCenter server, spin up a new PhotonOS VM and run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
+If you want to deploy a standalone vCenter server, run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
 1. lab_environment.json parameters are configured
 2. DNS entries are completed
 3. The vCenter ISO is mounted to the PhotonOS VM
@@ -98,7 +98,7 @@ If you want to deploy a standalone vCenter server, spin up a new PhotonOS VM and
 python3 hesiod-vcf5.py -vcs
 ```
 
-If you want to deploy a standalone nested ESXi server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-esx` parameter **after** you've completed these steps:
+If you want to deploy a standalone nested ESXi server (vSAN Ready), run hesiod-vcf with the `-esx` parameter **after** you've completed these steps:
 1. Download Nested ESXi OVA to `/usr/local/drop/`
 ```
 python3 hesiod-vcf5.py -esx

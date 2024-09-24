@@ -89,7 +89,8 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
     script.append(cmd)
     cmd = "$vSwitch=\"vSwitch0\"" #Hardcoded
     script.append(cmd)
-    cmd = "$pg=\""+lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]+"\""
+    #cmd = "$pg=\""+lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]+"\""
+    cmd = "$pg=\"VM Network\"" #Hardcoded
     script.append(cmd)
     cmd = "$vlanId=\"0\"" #Hardcoded
     script.append(cmd)
