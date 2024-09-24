@@ -13,6 +13,7 @@ The following physical equipment is **required** to run hesiod-vcf5:
 |-------------|-------------|
 | Physical Network | ability to provision multiple /24 VLANs: Management, VLAN, VSAN, NSX |
 | Physical ESXi | at least 1x physical server with 8 logical processors, 125GB Memory, and 800GB storage |
+| DNS Server | recommended: use [hesiod-dns](https://github.com/boconnor2017/hesiod-dns) to spin up an immutable DNS server and configure necessary DNS entries for VCF |
 
 The following binaries are **required** to run hesiod-vcf5:
 
@@ -89,11 +90,6 @@ python3 hesiod-vcf5.py
 ```
 
 ## PATH 3: I'm a VCF developer, I don't need everything...
-If you need a DNS server, spin up a new PhotonOS VM, repeat the quickstart steps above, and run hesiod-vcf with the `-dns` parameter:
-```
-python3 hesiod-vcf5.py -dns
-```
-
 If you want to deploy a standalone vCenter server, spin up a new PhotonOS VM and run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
 1. lab_environment.json parameters are configured
 2. DNS entries are completed

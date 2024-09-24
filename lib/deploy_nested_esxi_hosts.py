@@ -71,8 +71,7 @@ def get_pcli_get_hard_disks_cmd(nested_esxi_class):
     cmd = "$nesxi_hard_disks = Get-HardDisk -VM \""+nested_esxi_class.name_of_vm+"\""
     return cmd 
 
-def get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number):
-    #physical_server_number is the host you are deploying to (default 0)
+def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
     script = []
     vmhosts_cmd = ""
     #Pull all hosts from lab json
@@ -173,14 +172,17 @@ def deploy_nested_esxi(nested_esxi_class):
     cmd_returned_value = run_cmd_on_os(deploy_nesxi_cmd)
     return cmd_returned_value
 
-def populate_nested_esxi_class_from_json(lab_json_py, host_number, physical_server_number):
+def populate_nested_esxi_class_from_json(lab_json_py, host_number):
     #lab_json_py is the python variable holding lab environment details
     #nested_esxi_class contains params for ONE esxi host at a time... therefore...
     #host_number is the list index for the given host (0-3 in a 4 node cluster)
     #hosts will be deployed to VCF Management Network by default
     class nested_esxi_class:
-        deploy_to_this_port_group = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
-        deploy_to_this_datastore = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_datastore"]
+        physical_server_number = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["deploy_to_physical_host"]
+        #deploy_to_this_port_group = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
+        deploy_to_this_port_group = lab_json_py["physical_server"][physical_server_number]["deploy_vms_to_this_network"]
+        #deploy_to_this_datastore = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_datastore"]
+        deploy_to_this_datastore = lab_json_py["physical_server"][physical_server_number]["deploy_vms_to_this_datastore"]
         name_of_vm = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["name_of_vm"]
         esxi_hostname = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_hostname"]
         esxi_ip_address = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_ip_address"]
@@ -200,8 +202,8 @@ def populate_nested_esxi_class_from_json(lab_json_py, host_number, physical_serv
         harddiskCapacityGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["harddiskcapacityGB"]
     return nested_esxi_class
 
-def prep_esxi_hosts_for_vcf(lab_json_py, physical_server_number):
-    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py, physical_server_number)
+def prep_esxi_hosts_for_vcf(lab_json_py):
+    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py)
     pcli_script_name = "validate_esxi_for_vcf5.ps1"
     write_cmd_to_script_file(pcli_script, pcli_script_name)
     cmd = "pwsh "+pcli_script_name
