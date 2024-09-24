@@ -8,7 +8,6 @@ from hesiod import lib_paramiko as libpko
 from lib import deploy_vcenter as vcslib
 from lib import deploy_nested_esxi_hosts as esxlib
 from lib import prompts as promptlib
-from lib import markdown as mdlib
 
 # Import Standard Python libraries
 import os
@@ -124,10 +123,7 @@ def deploy_esx():
     else:
         print("Deploying Nested ESXi Server.")
         host_number = int(input("Select the host number you want to deploy from \"host specs\" (0-3): "))
-        physical_server_number = int(input("Select the physical host number you want to deploy to (use 0 if you only have one physical server): "))
-        err = "    User selected host: "+str(host_number)
-        liblog.write_to_logs(err, logfile_name)
-        nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number, physical_server_number)
+        nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number)
         err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
         liblog.write_to_logs(err, logfile_name)
         cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
@@ -147,7 +143,7 @@ def deploy_esx():
         esxlib.pause_python_for_duration(seconds)
         err = "    Preparing ESXi host for VCF."
         liblog.write_to_logs(err, logfile_name)
-        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py, physical_server_number)
+        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py)
         err = "    Rebooting ESXi hosts."
         liblog.write_to_logs(err, logfile_name)
         cmd_returned_value = esxlib.reboot_esxi_hosts(env_json_py)
