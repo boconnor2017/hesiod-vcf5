@@ -38,6 +38,8 @@ Deploy Photon OS OVA to the physical server. Follow the steps in the [Hesiod Pho
 
 Next, install OVFTool by following the steps in the [Hesiod Install OVFTool on Photon OS](https://github.com/boconnor2017/hesiod/tree/main/ovftool) process.
 
+Next, install PowerCLI by following the steps in the [Hesiod Install PowerCLI directly to the OS](https://github.com/boconnor2017/hesiod/blob/main/powershell/readme.md) process.
+
 *Recommended: run these scripts as root.*
 ```
 cd /usr/local/

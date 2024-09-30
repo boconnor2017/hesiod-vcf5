@@ -126,6 +126,8 @@ def deploy_esx():
         nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, host_number)
         err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
         liblog.write_to_logs(err, logfile_name)
+        err = "    Network info: ip="+nested_esxi_class.esxi_ip_address+", gateway="+nested_esxi_class.gateway+", hostname="+nested_esxi_class.esxi_hostname+", domain="+nested_esxi_class.domain
+        liblog.write_to_logs(err, logfile_name)
         cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
         err = "    cmd_returned_value: "+str(cmd_returned_value)
         liblog.write_to_logs(err, logfile_name)
