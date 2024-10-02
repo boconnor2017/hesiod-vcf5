@@ -56,7 +56,7 @@ def _main_():
             cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
             err = "    cmd_returned_value: "+str(cmd_returned_value)
             liblog.write_to_logs(err, logfile_name)
-            seconds = 90
+            seconds = 150
             err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete initial boot."
             liblog.write_to_logs(err, logfile_name)
             esxlib.pause_python_for_duration(seconds)
