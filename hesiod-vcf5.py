@@ -77,8 +77,6 @@ def _main_():
         print("")
         print("")
         print("Your Nested ESXi Hosts are prepped. You may now login to CloudBuilder and begin bringup.")
-        print("Use cp /usr/local/drop/lab.json json/lab_environment.json to pull your saved lab config details.")
-        print("Use cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json to pull your saved vcf config details.")
     
 def deploy_vcsa():
     prereq_validation_check_1 = False 
