@@ -12,7 +12,7 @@ The following physical equipment is **required** to run hesiod-vcf5:
 | Requirement | Description |
 |-------------|-------------|
 | Physical Network | ability to provision multiple /24 VLANs: Management, VLAN, VSAN, NSX |
-| Physical ESXi | at least 1x physical server with 8 logical processors, 125GB Memory, and 800GB storage |
+| Physical ESXi | at least 1x physical server. See [Lab Sizing Guide](#lab-sizing-guide) below. |
 | DNS Server | recommended: use [hesiod-dns](https://github.com/boconnor2017/hesiod-dns) to spin up an immutable DNS server and configure necessary DNS entries for VCF |
 
 The following binaries are **required** to run hesiod-vcf5:
@@ -105,3 +105,12 @@ If you want to deploy a standalone nested ESXi server (vSAN Ready), run hesiod-v
 ```
 python3 hesiod-vcf5.py -esx
 ```
+
+# Lab Sizing Guide
+The Physical ESXi host must contain enough resources to host a number of nested ESXi hosts at various sizes. Depending on the amount of resources allocated to this project will help to determine performance and scope of this project.
+
+| VCF Use Case | Description | CPU | Memory | Storage |
+|----------|-------------|-----|--------|---------|
+| Bring Up Enablement | I want to install VCF and that's it. | 8 | 200GB | 500GB |
+| Certification Lab | I want to install VCF with at least one other workload domain. | 8 | 400GB | 1TB |
+| Cloud Lab | I want to install VCF with at least one other workload domain and the Aria Suite. | 8 | 400GB | 2TB |
