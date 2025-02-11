@@ -40,7 +40,7 @@ Next, install OVFTool by following the steps in the [Hesiod Install OVFTool on P
 
 Next, install PowerCLI by following the steps in the [Hesiod Install PowerCLI directly to the OS](https://github.com/boconnor2017/hesiod/blob/main/powershell/readme.md) process.
 
-*Recommended: run these scripts as root.*
+Run the following scripts as root.
 ```
 cd /usr/local/
 ```
@@ -54,7 +54,9 @@ cp -r hesiod/python/ hesiod-vcf5/hesiod
 cd hesiod-vcf5/
 ```
 
-## PATH 1: This is my first time running this script...
+Next select from one of the following paths:   
+
+## PATH 1: This is my first time running this script, I need to build my config files.
 The first time you run this script you will need to setup your config files. Don't worry, the prompts below will guide you through the process.
 
 To create lab environment configuration, use the `-lev` parameter and walk through the CLI prompt:
@@ -85,13 +87,24 @@ cp /usr/local/drop/vcf.json json/vcf5_bringup_template.json
 
 *CHECKPOINT: by now all network configurations (Management, VSAN, vMotion, and TEP VLANs), DNS entries, and configuration files must be completed. If so, move on to **PATH 2** below.*
 
-## PATH 2: I'm a pro already, let's get on with it...
-Build the VCF Ready nested ESXi environment
+## PATH 2: I have my config files already, I need to build a management cluster.
+Before running the script below, ensure that the following conditions have been met:
+1. The `lab_environment.json` config file is populated and stored in the `/json` folder. 
+2. The `vcf5_bringup_template.json` config file is populated and stored in the `/json` folder.
+3. The ESXi 8.0U3 ova is uploaded to the `/usr/local/drop/` folder.   
+
+Run the following script to build the VCF Ready nested ESXi environment.
 ```
 python3 hesiod-vcf5.py 
 ```
 
-## PATH 3: I'm a VCF developer, I don't need everything...
+## PATH 3: I have a VCF Management Domain already, I need to build VI clusters.
+(Coming soon)
+
+## PATH 4: I have a VCF Management Domain already, I need to build an AVN.
+(Coming soon)
+
+## PATH 5: I'm a developer, I just need a standalone vCenter Server.
 If you want to deploy a standalone vCenter server, run hesiod-vcf with the `-vcs` parameter **after** you've completed these steps:
 1. lab_environment.json parameters are configured
 2. DNS entries are completed
