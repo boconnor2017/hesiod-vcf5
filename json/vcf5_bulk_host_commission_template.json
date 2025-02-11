@@ -1,0 +1,20 @@
+{
+    "hostsSpec": [
+        {
+            "hostfqdn": "FQDN of Host",
+            "username": "Host Username",
+            "storageType": "VSAN",
+            "password": "Host Password",
+            "networkPoolName": "VCF Network Pool Name",
+            "vvolStorageProtocolType": ""
+        },
+        {
+            "hostfqdn": "FQDN of Host",
+            "username": "Host Username",
+            "storageType": "VSAN",
+            "password": "Host Password",
+            "networkPoolName": "VCF Network Pool Name",
+            "vvolStorageProtocolType": ""
+        }
+    ]
+}

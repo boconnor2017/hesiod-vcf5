@@ -182,7 +182,7 @@ def deploy_vi():
 
         err = "    Preparing ESXi host for VCF."
         liblog.write_to_logs(err, logfile_name)
-        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py)
+        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py, "vi_host_specs")
         print("")
         print("")
         print("")

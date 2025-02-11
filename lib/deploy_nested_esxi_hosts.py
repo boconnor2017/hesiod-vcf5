@@ -71,11 +71,11 @@ def get_pcli_get_hard_disks_cmd(nested_esxi_class):
     cmd = "$nesxi_hard_disks = Get-HardDisk -VM \""+nested_esxi_class.name_of_vm+"\""
     return cmd 
 
-def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
+def get_pcli_prep_host_for_vcf_cmd(lab_json_py, x_host_specs):
     script = []
     vmhosts_cmd = ""
     #Pull all hosts from lab json
-    for hosts in lab_json_py["nested_esxi_servers"]["management_host_specs"]:
+    for hosts in lab_json_py["nested_esxi_servers"][x_host_specs]:
         vmhosts_cmd = vmhosts_cmd+"\""+hosts["esxi_ip_address"]+"\", "
     #Remove the last comma and space
     vmhosts_cmd = vmhosts_cmd[:-2]
@@ -201,8 +201,8 @@ def populate_nested_esxi_class_from_json(lab_json_py, host_number, x_host_specs)
         harddiskCapacityGB = lab_json_py["nested_esxi_servers"]["universal_specs"]["harddiskcapacityGB"]
     return nested_esxi_class
 
-def prep_esxi_hosts_for_vcf(lab_json_py):
-    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py)
+def prep_esxi_hosts_for_vcf(lab_json_py, x_host_specs):
+    pcli_script = get_pcli_prep_host_for_vcf_cmd(lab_json_py, x_host_specs)
     pcli_script_name = "validate_esxi_for_vcf5.ps1"
     write_cmd_to_script_file(pcli_script, pcli_script_name)
     cmd = "pwsh "+pcli_script_name
