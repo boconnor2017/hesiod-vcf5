@@ -1,20 +1,20 @@
 {
     "hostsSpec": [
         {
-            "hostfqdn": "FQDN of Host",
-            "username": "Host Username",
-            "storageType": "VSAN",
-            "password": "Host Password",
-            "networkPoolName": "VCF Network Pool Name",
-            "vvolStorageProtocolType": ""
+            "hostfqdn": "-- Fully qualified host domain name goes here --",
+            "username": "-- User Name goes here --",
+            "storageType": "-- VSAN/VSAN_REMOTE/VSAN_ESA/VSAN_MAX/NFS/VMFS_FC/VVOL --",
+            "password": "-- Password goes here --",
+            "networkPoolName": "-- Network Pool Name goes here --",
+            "vvolStorageProtocolType": "-- VMFS_FC/ISCSI/NFS --"
         },
         {
-            "hostfqdn": "FQDN of Host",
-            "username": "Host Username",
-            "storageType": "VSAN",
-            "password": "Host Password",
-            "networkPoolName": "VCF Network Pool Name",
-            "vvolStorageProtocolType": ""
+            "hostfqdn": "-- Fully qualified host domain name goes here --",
+            "username": "-- User Name goes here --",
+            "storageType": "-- VSAN/VSAN_REMOTE/VSAN_ESA/VSAN_MAX/NFS/VMFS_FC/VVOL --",
+            "password": "-- Password goes here --",
+            "networkPoolName": "-- Network Pool Name goes here --",
+            "vvolStorageProtocolType": "-- VMFS_FC/ISCSI/NFS --"
         }
     ]
 }
