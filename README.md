@@ -99,7 +99,15 @@ python3 hesiod-vcf5.py
 ```
 
 ## PATH 3: I have a VCF Management Domain already, I need to build VI clusters.
-(Coming soon)
+Before running the script below, ensure that the following conditions have been met:
+1. The `lab_environment.json` config file is populated and stored in the `/json` folder. 
+2. The `vcf5_bringup_template.json` config file is populated and stored in the `/json` folder.
+3. The ESXi 8.0U3 ova is uploaded to the `/usr/local/drop/` folder.   
+
+Run the following script with the `-vi` parameter to build the VCF Ready nested ESXi environment.
+```
+python3 hesiod-vcf5.py -vi
+```
 
 ## PATH 4: I have a VCF Management Domain already, I need to build an AVN.
 (Coming soon)

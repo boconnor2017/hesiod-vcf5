@@ -44,13 +44,12 @@ def _main_():
     if prereq_validation_check_1 is False:
         sys.exit()
     else:
-        #physical_server_number = int(input("Select the physical host number you want to deploy to (use 0 if you only have one physical server): "))
-        nested_esxi_count = len(env_json_py["nested_esxi_servers"]["host_specs"])
+        nested_esxi_count = len(env_json_py["nested_esxi_servers"]["management_host_specs"])
         i=0
         while i < nested_esxi_count:
             err = "    Initiating class for host: "+str(i)
             liblog.write_to_logs(err, logfile_name)
-            nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, i)
+            nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, i, "management_host_specs")
             err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
             liblog.write_to_logs(err, logfile_name)
             cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
@@ -150,6 +149,45 @@ def deploy_esx():
         err = "Finished!"
         liblog.write_to_logs(err, logfile_name)
 
+def deploy_vi():
+    prereq_validation_check_1 = False 
+    prereq_validation_check_1 = esxlib.prereq_validate_ova()
+    if prereq_validation_check_1 is False:
+        sys.exit()
+    else:
+        nested_esxi_count = len(env_json_py["nested_esxi_servers"]["vi_host_specs"])
+        i=0
+        while i < nested_esxi_count:
+            err = "    Initiating class for host: "+str(i)
+            liblog.write_to_logs(err, logfile_name)
+            nested_esxi_class = esxlib.populate_nested_esxi_class_from_json(env_json_py, i, "vi_host_specs")
+            err = "    Deploying: "+nested_esxi_class.name_of_vm+" Size: "+nested_esxi_class.numCPU+"CPU, "+nested_esxi_class.memoryGB+"GB Memory, and "+nested_esxi_class.harddiskCapacityGB+"GB storage."
+            liblog.write_to_logs(err, logfile_name)
+            cmd_returned_value = esxlib.deploy_nested_esxi(nested_esxi_class)
+            err = "    cmd_returned_value: "+str(cmd_returned_value)
+            liblog.write_to_logs(err, logfile_name)
+            seconds = 150
+            err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete initial boot."
+            liblog.write_to_logs(err, logfile_name)
+            esxlib.pause_python_for_duration(seconds)
+            err = "    Sizing VM."
+            liblog.write_to_logs(err, logfile_name)
+            cmd_returned_value = esxlib.size_nested_esxi(nested_esxi_class)
+            err = "    cmd_returned_value: "+str(cmd_returned_value)
+            liblog.write_to_logs(err, logfile_name)
+            err = "    Pausing for "+str(seconds)+" to allow ESXi server to complete sizing reboot."
+            liblog.write_to_logs(err, logfile_name)
+            esxlib.pause_python_for_duration(seconds)
+            i=i+1
+
+        err = "    Preparing ESXi host for VCF."
+        liblog.write_to_logs(err, logfile_name)
+        cmd_returned_value = esxlib.prep_esxi_hosts_for_vcf(env_json_py)
+        print("")
+        print("")
+        print("")
+        print("Your Nested ESXi Hosts are prepped. You may now login to the SDDC Manager to import your new hosts.")
+
 def help_stdout():
     print("HELP MENU: hesiod-vcf5.py [options]")
     print("Enter options 1x per run, do not add all parameters at once!")
@@ -158,7 +196,8 @@ def help_stdout():
     print("-vcf     option to prompt for vcf bringup variables.")
     print("-vcs     option to deploy a vCenter server.")
     print("-esx     option to deploy a nested ESXi server.")
-    print("None     default, assumes all config files are populated and DNS is available.")
+    print("-vi      option to deploy a set of nested ESXi servers for VI workload domain.")
+    print("None     default, deploys a set of nested ESXi servers ready for VCF Bringup.")
     print("")
     print("")
 
@@ -180,6 +219,10 @@ def match_vcf(args):
 
 def match_vcs(args):
     if '-vcs' in args:
+        return True
+
+def match_vi(args):
+    if '-vi' in args:
         return True
 
 # Get args
@@ -240,6 +283,16 @@ else:
       err = "    -esx found. Initiating ESXi deployment."
       liblog.write_to_logs(err, logfile_name)
       deploy_esx()
+      err = "    Exiting script."
+      liblog.write_to_logs(err, logfile_name)
+      sys.exit() 
+
+  match_found = False 
+  match_found = match_vi(sys.argv)
+  if match_found :
+      err = "    -vi found. Initiating VI cluster deployment."
+      liblog.write_to_logs(err, logfile_name)
+      deploy_vi()
       err = "    Exiting script."
       liblog.write_to_logs(err, logfile_name)
       sys.exit() 

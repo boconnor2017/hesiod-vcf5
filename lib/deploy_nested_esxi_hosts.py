@@ -75,7 +75,7 @@ def get_pcli_prep_host_for_vcf_cmd(lab_json_py):
     script = []
     vmhosts_cmd = ""
     #Pull all hosts from lab json
-    for hosts in lab_json_py["nested_esxi_servers"]["host_specs"]:
+    for hosts in lab_json_py["nested_esxi_servers"]["management_host_specs"]:
         vmhosts_cmd = vmhosts_cmd+"\""+hosts["esxi_ip_address"]+"\", "
     #Remove the last comma and space
     vmhosts_cmd = vmhosts_cmd[:-2]
@@ -173,20 +173,18 @@ def deploy_nested_esxi(nested_esxi_class):
     cmd_returned_value = run_cmd_on_os(deploy_nesxi_cmd)
     return cmd_returned_value
 
-def populate_nested_esxi_class_from_json(lab_json_py, host_number):
+def populate_nested_esxi_class_from_json(lab_json_py, host_number, x_host_specs):
     #lab_json_py is the python variable holding lab environment details
     #nested_esxi_class contains params for ONE esxi host at a time... therefore...
     #host_number is the list index for the given host (0-3 in a 4 node cluster)
     #hosts will be deployed to VCF Management Network by default
     class nested_esxi_class:
-        physical_server_number = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["deploy_to_physical_host"]
-        #deploy_to_this_port_group = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_network"]
+        physical_server_number = lab_json_py["nested_esxi_servers"][x_host_specs][host_number]["deploy_to_physical_host"]
         deploy_to_this_port_group = lab_json_py["physical_server"][physical_server_number]["deploy_vms_to_this_network"]
-        #deploy_to_this_datastore = lab_json_py["nested_esxi_servers"]["universal_specs"]["deployment_datastore"]
         deploy_to_this_datastore = lab_json_py["physical_server"][physical_server_number]["deploy_vms_to_this_datastore"]
-        name_of_vm = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["name_of_vm"]
-        esxi_hostname = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_hostname"]
-        esxi_ip_address = lab_json_py["nested_esxi_servers"]["host_specs"][host_number]["esxi_ip_address"]
+        name_of_vm = lab_json_py["nested_esxi_servers"][x_host_specs][host_number]["name_of_vm"]
+        esxi_hostname = lab_json_py["nested_esxi_servers"][x_host_specs][host_number]["esxi_hostname"]
+        esxi_ip_address = lab_json_py["nested_esxi_servers"][x_host_specs][host_number]["esxi_ip_address"]
         vlan = "0" #hardcoded
         netmask = lab_json_py["physical_network"][1]["subnet_mask"] #VCF Management Subnet
         gateway = lab_json_py["physical_network"][1]["default_gateway"] #VCF Management Subnet
@@ -215,7 +213,7 @@ def reboot_esxi_hosts(lab_json_py):
     script = []
     vmhosts_cmd = ""
     #Pull all hosts from lab json
-    for hosts in lab_json_py["nested_esxi_servers"]["host_specs"]:
+    for hosts in lab_json_py["nested_esxi_servers"]["management_host_specs"]:
         vmhosts_cmd = vmhosts_cmd+"\""+hosts["esxi_ip_address"]+"\", "
     #Remove the last comma and space
     vmhosts_cmd = vmhosts_cmd[:-2]
